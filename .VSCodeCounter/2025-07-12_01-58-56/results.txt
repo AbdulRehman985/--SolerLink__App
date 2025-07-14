@@ -1,0 +1,113 @@
+Date : 2025-07-12 01:58:56
+Directory : c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK
+Total : 57 files,  8958 codes, 24 comments, 300 blanks, all 9282 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JSON           |          4 |      6,321 |          0 |          4 |      6,325 |
+| JavaScript JSX |         21 |      1,590 |         10 |        162 |      1,762 |
+| JavaScript     |         25 |        994 |         12 |        120 |      1,126 |
+| PostCSS        |          3 |         28 |          2 |          7 |         37 |
+| HTML           |          1 |         13 |          0 |          1 |         14 |
+| Markdown       |          1 |          7 |          0 |          6 |         13 |
+| Properties     |          1 |          4 |          0 |          0 |          4 |
+| XML            |          1 |          1 |          0 |          0 |          1 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                               |         57 |      8,958 |         24 |        300 |      9,282 |
+| . (Files)                                                                                                                       |          3 |      2,103 |          0 |          2 |      2,105 |
+| backend                                                                                                                         |         16 |        679 |         12 |         95 |        786 |
+| backend (Files)                                                                                                                 |          1 |         33 |          0 |          2 |         35 |
+| backend\config                                                                                                                  |          1 |          9 |          0 |          2 |         11 |
+| backend\controllers                                                                                                             |          4 |        392 |         11 |         68 |        471 |
+| backend\middleware                                                                                                              |          2 |         34 |          0 |          7 |         41 |
+| backend\models                                                                                                                  |          3 |         68 |          0 |          8 |         76 |
+| backend\routes                                                                                                                  |          4 |        130 |          1 |          7 |        138 |
+| backend\utils                                                                                                                   |          1 |         13 |          0 |          1 |         14 |
+| frontend                                                                                                                        |         38 |      6,176 |         12 |        203 |      6,391 |
+| frontend (Files)                                                                                                                |          6 |      4,294 |          0 |         13 |      4,307 |
+| frontend\public                                                                                                                 |          1 |          1 |          0 |          0 |          1 |
+| frontend\src                                                                                                                    |         31 |      1,881 |         12 |        190 |      2,083 |
+| frontend\src (Files)                                                                                                            |          5 |         78 |          0 |         11 |         89 |
+| frontend\src\components                                                                                                         |          6 |        118 |          0 |         20 |        138 |
+| frontend\src\pages                                                                                                              |         13 |      1,422 |         12 |        138 |      1,572 |
+| frontend\src\pages\Admin                                                                                                        |          7 |        840 |          7 |         91 |        938 |
+| frontend\src\pages\Product                                                                                                      |          1 |         11 |          0 |          3 |         14 |
+| frontend\src\pages\User                                                                                                         |          1 |        113 |          1 |         11 |        125 |
+| frontend\src\pages\auth                                                                                                         |          4 |        458 |          4 |         33 |        495 |
+| frontend\src\redux                                                                                                              |          7 |        263 |          0 |         21 |        284 |
+| frontend\src\redux\api                                                                                                          |          4 |        219 |          0 |         14 |        233 |
+| frontend\src\redux\features                                                                                                     |          3 |         44 |          0 |          7 |         51 |
+| frontend\src\redux\features (Files)                                                                                             |          2 |         20 |          0 |          3 |         23 |
+| frontend\src\redux\features\auth                                                                                                |          1 |         24 |          0 |          4 |         28 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                                        | language       | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\.env                                          | Properties     |          4 |          0 |          0 |          4 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\config\db.js                          | JavaScript     |          9 |          0 |          2 |         11 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\CategoryController.js     | JavaScript     |         64 |          0 |          7 |         71 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\FileUploadController.js   | JavaScript     |          0 |          0 |          1 |          1 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\ProductController.js      | JavaScript     |        166 |          0 |         18 |        184 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\userCntrl.js              | JavaScript     |        162 |         11 |         42 |        215 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\index.js                              | JavaScript     |         33 |          0 |          2 |         35 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\middleware\CheckId.js                 | JavaScript     |          9 |          0 |          3 |         12 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\middleware\authMiddleware.js          | JavaScript     |         25 |          0 |          4 |         29 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\CategoryModel.js               | JavaScript     |         11 |          0 |          2 |         13 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\ProductModel.js                | JavaScript     |         32 |          0 |          4 |         36 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\userModel.js                   | JavaScript     |         25 |          0 |          2 |         27 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\CategoryRouter.js              | JavaScript     |         21 |          0 |          2 |         23 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\FileUploadRouter.js            | JavaScript     |         41 |          0 |          1 |         42 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\ProductRouter.js               | JavaScript     |         35 |          0 |          3 |         38 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\userRouter.js                  | JavaScript     |         33 |          1 |          1 |         35 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\utils\createToken.js                  | JavaScript     |         13 |          0 |          1 |         14 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\README.md                            | Markdown       |          7 |          0 |          6 |         13 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\eslint.config.js                     | JavaScript     |         32 |          0 |          2 |         34 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\index.html                           | HTML           |         13 |          0 |          1 |         14 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\package-lock.json                    | JSON           |      4,179 |          0 |          1 |      4,180 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\package.json                         | JSON           |         43 |          0 |          1 |         44 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\public\vite.svg                      | XML            |          1 |          0 |          0 |          1 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\App.css                          | PostCSS        |          1 |          0 |          1 |          2 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\App.jsx                          | JavaScript JSX |         19 |          0 |          3 |         22 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\Home.jsx                         | JavaScript JSX |         10 |          0 |          3 |         13 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\CategoryForm.jsx      | JavaScript JSX |         41 |          0 |          3 |         44 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Header.jsx            | JavaScript JSX |         27 |          0 |          6 |         33 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Loader.jsx            | JavaScript JSX |          7 |          0 |          3 |         10 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Message.jsx           | JavaScript JSX |         15 |          0 |          3 |         18 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Model.jsx             | JavaScript JSX |         22 |          0 |          3 |         25 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Privateroute.jsx      | JavaScript JSX |          6 |          0 |          2 |          8 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\index.css                        | PostCSS        |          4 |          0 |          1 |          5 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\main.jsx                         | JavaScript JSX |         44 |          0 |          3 |         47 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AdminMenu.jsx        | JavaScript JSX |         61 |          2 |          6 |         69 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AdminRoute.jsx       | JavaScript JSX |         12 |          0 |          4 |         16 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AllProduct.jsx       | JavaScript JSX |         93 |          2 |         10 |        105 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\CategoryList.jsx     | JavaScript JSX |        131 |          3 |         10 |        144 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Productlist.jsx      | JavaScript JSX |        174 |          0 |         20 |        194 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Updateproduct.jsx    | JavaScript JSX |        213 |          0 |         25 |        238 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Userlist.jsx         | JavaScript JSX |        156 |          0 |         16 |        172 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Product\SmallProduct.jsx   | JavaScript JSX |         11 |          0 |          3 |         14 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\User\Profile.jsx           | JavaScript JSX |        113 |          1 |         11 |        125 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Login.jsx             | JavaScript JSX |        103 |          0 |         10 |        113 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Navigation.css        | PostCSS        |         23 |          2 |          5 |         30 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Navigation.jsx        | JavaScript JSX |        182 |          2 |          8 |        192 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Register.jsx          | JavaScript JSX |        150 |          0 |         10 |        160 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\CategorySlice.js       | JavaScript     |         44 |          0 |          2 |         46 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\ProductApiSlice.js     | JavaScript     |         86 |          0 |          6 |         92 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\apiSlice.js            | JavaScript     |         11 |          0 |          3 |         14 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\userApiSlice.js        | JavaScript     |         78 |          0 |          3 |         81 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\auth\authSlice.js | JavaScript     |         24 |          0 |          4 |         28 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\constants.js      | JavaScript     |          5 |          0 |          1 |          6 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\store.js          | JavaScript     |         15 |          0 |          2 |         17 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\vite.config.js                       | JavaScript     |         20 |          0 |          2 |         22 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\package-lock.json                             | JSON           |      2,069 |          0 |          1 |      2,070 |
+| c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\package.json                                  | JSON           |         30 |          0 |          1 |         31 |
+| Total                                                                                                                           |                |      8,958 |         24 |        300 |      9,282 |
++---------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

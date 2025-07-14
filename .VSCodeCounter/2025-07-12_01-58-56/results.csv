@@ -1,0 +1,59 @@
+"filename", "language", "JSON", "HTML", "JavaScript", "Markdown", "JavaScript JSX", "PostCSS", "XML", "Properties", "comment", "blank", "total"
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\.env", "Properties", 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\config\db.js", "JavaScript", 0, 0, 9, 0, 0, 0, 0, 0, 0, 2, 11
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\CategoryController.js", "JavaScript", 0, 0, 64, 0, 0, 0, 0, 0, 0, 7, 71
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\FileUploadController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\ProductController.js", "JavaScript", 0, 0, 166, 0, 0, 0, 0, 0, 0, 18, 184
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\controllers\userCntrl.js", "JavaScript", 0, 0, 162, 0, 0, 0, 0, 0, 11, 42, 215
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\index.js", "JavaScript", 0, 0, 33, 0, 0, 0, 0, 0, 0, 2, 35
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\middleware\CheckId.js", "JavaScript", 0, 0, 9, 0, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\middleware\authMiddleware.js", "JavaScript", 0, 0, 25, 0, 0, 0, 0, 0, 0, 4, 29
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\CategoryModel.js", "JavaScript", 0, 0, 11, 0, 0, 0, 0, 0, 0, 2, 13
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\ProductModel.js", "JavaScript", 0, 0, 32, 0, 0, 0, 0, 0, 0, 4, 36
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\models\userModel.js", "JavaScript", 0, 0, 25, 0, 0, 0, 0, 0, 0, 2, 27
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\CategoryRouter.js", "JavaScript", 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\FileUploadRouter.js", "JavaScript", 0, 0, 41, 0, 0, 0, 0, 0, 0, 1, 42
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\ProductRouter.js", "JavaScript", 0, 0, 35, 0, 0, 0, 0, 0, 0, 3, 38
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\routes\userRouter.js", "JavaScript", 0, 0, 33, 0, 0, 0, 0, 0, 1, 1, 35
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\backend\utils\createToken.js", "JavaScript", 0, 0, 13, 0, 0, 0, 0, 0, 0, 1, 14
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\README.md", "Markdown", 0, 0, 0, 7, 0, 0, 0, 0, 0, 6, 13
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\eslint.config.js", "JavaScript", 0, 0, 32, 0, 0, 0, 0, 0, 0, 2, 34
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\index.html", "HTML", 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\package-lock.json", "JSON", 4179, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4180
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\package.json", "JSON", 43, 0, 0, 0, 0, 0, 0, 0, 0, 1, 44
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\public\vite.svg", "XML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\App.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\App.jsx", "JavaScript JSX", 0, 0, 0, 0, 19, 0, 0, 0, 0, 3, 22
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\Home.jsx", "JavaScript JSX", 0, 0, 0, 0, 10, 0, 0, 0, 0, 3, 13
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\CategoryForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 41, 0, 0, 0, 0, 3, 44
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Header.jsx", "JavaScript JSX", 0, 0, 0, 0, 27, 0, 0, 0, 0, 6, 33
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Loader.jsx", "JavaScript JSX", 0, 0, 0, 0, 7, 0, 0, 0, 0, 3, 10
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Message.jsx", "JavaScript JSX", 0, 0, 0, 0, 15, 0, 0, 0, 0, 3, 18
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Model.jsx", "JavaScript JSX", 0, 0, 0, 0, 22, 0, 0, 0, 0, 3, 25
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\components\Privateroute.jsx", "JavaScript JSX", 0, 0, 0, 0, 6, 0, 0, 0, 0, 2, 8
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\index.css", "PostCSS", 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 5
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 0, 0, 44, 0, 0, 0, 0, 3, 47
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AdminMenu.jsx", "JavaScript JSX", 0, 0, 0, 0, 61, 0, 0, 0, 2, 6, 69
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AdminRoute.jsx", "JavaScript JSX", 0, 0, 0, 0, 12, 0, 0, 0, 0, 4, 16
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\AllProduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 93, 0, 0, 0, 2, 10, 105
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\CategoryList.jsx", "JavaScript JSX", 0, 0, 0, 0, 131, 0, 0, 0, 3, 10, 144
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Productlist.jsx", "JavaScript JSX", 0, 0, 0, 0, 174, 0, 0, 0, 0, 20, 194
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Updateproduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 213, 0, 0, 0, 0, 25, 238
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Admin\Userlist.jsx", "JavaScript JSX", 0, 0, 0, 0, 156, 0, 0, 0, 0, 16, 172
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\Product\SmallProduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 11, 0, 0, 0, 0, 3, 14
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\User\Profile.jsx", "JavaScript JSX", 0, 0, 0, 0, 113, 0, 0, 0, 1, 11, 125
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Login.jsx", "JavaScript JSX", 0, 0, 0, 0, 103, 0, 0, 0, 0, 10, 113
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Navigation.css", "PostCSS", 0, 0, 0, 0, 0, 23, 0, 0, 2, 5, 30
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Navigation.jsx", "JavaScript JSX", 0, 0, 0, 0, 182, 0, 0, 0, 2, 8, 192
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\pages\auth\Register.jsx", "JavaScript JSX", 0, 0, 0, 0, 150, 0, 0, 0, 0, 10, 160
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\CategorySlice.js", "JavaScript", 0, 0, 44, 0, 0, 0, 0, 0, 0, 2, 46
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\ProductApiSlice.js", "JavaScript", 0, 0, 86, 0, 0, 0, 0, 0, 0, 6, 92
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\apiSlice.js", "JavaScript", 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\api\userApiSlice.js", "JavaScript", 0, 0, 78, 0, 0, 0, 0, 0, 0, 3, 81
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\auth\authSlice.js", "JavaScript", 0, 0, 24, 0, 0, 0, 0, 0, 0, 4, 28
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\constants.js", "JavaScript", 0, 0, 5, 0, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\src\redux\features\store.js", "JavaScript", 0, 0, 15, 0, 0, 0, 0, 0, 0, 2, 17
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\frontend\vite.config.js", "JavaScript", 0, 0, 20, 0, 0, 0, 0, 0, 0, 2, 22
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\package-lock.json", "JSON", 2069, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2070
+"c:\Users\rehan\OneDrive\Documents\projects\E_COMMERENCE WEBSITE USING MERN__STACK\package.json", "JSON", 30, 0, 0, 0, 0, 0, 0, 0, 0, 1, 31
+"Total", "-", 6321, 13, 994, 7, 1590, 28, 1, 4, 24, 300, 9282
