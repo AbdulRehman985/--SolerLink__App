@@ -1,0 +1,29 @@
+/* Navigation.css */
+#navigation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #000; /* or your sidebar bg */
+  width: 6%;
+  transition: width 0.3s ease-in-out;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+
+#navigation-container:hover {
+  width: 15%;
+}
+
+/* Show nav names only on hover */
+.nav-item-name {
+  display: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+#navigation-container:hover .nav-item-name {
+  display: block;
+  opacity: 1;
+}
