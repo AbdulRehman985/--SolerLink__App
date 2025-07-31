@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Fab from "@mui/material/Fab";
+import NavigationIcon from "@mui/icons-material/Navigation";
 
 const ReadMoreText = ({ text, maxLength = 150 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -23,12 +25,16 @@ const ReadMoreText = ({ text, maxLength = 150 }) => {
 
       {/* Read More / Show Less Button */}
       {text.length > maxLength && (
-        <button
+        <Fab
+          variant="extended"
+          size="small"
+          color="primary"
           onClick={toggleReadMore}
-          className="mt-2 text-pink-500 font-semibold hover:text-pink-400 transition"
+          className="mt-2"
         >
-          {isExpanded ? "Show Less ▲" : "Read More ▼"}
-        </button>
+          <NavigationIcon sx={{ mr: 1 }} />
+          {isExpanded ? "Show Less" : "Read More"}
+        </Fab>
       )}
     </div>
   );
