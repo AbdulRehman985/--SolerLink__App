@@ -13,6 +13,7 @@ import {
   fetchProduct,
   fetchProductById,
   fetchTopProduct,
+  filterdProduct,
   updateProductDetails,
 } from "../controllers/ProductController.js";
 import checkId from "../middleware/CheckId.js";
@@ -33,5 +34,5 @@ productRouter
   .get(fetchProductById)
   .put(authitacted, authorizedIsAdmin, formidable(), updateProductDetails)
   .delete(authitacted, authorizedIsAdmin, formidable(), destroyProduct);
-
+productRouter.route("/filterd-product").post(filterdProduct);
 export default productRouter;

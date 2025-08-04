@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   useCreateReviewMutation,
   useGetProductDetailsQuery,
@@ -18,12 +18,15 @@ import {
 } from "react-icons/fa";
 import moment from "moment";
 import Rating from "./Rating";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ProductTabs from "./ProductTabs";
+import { addToCart } from "../../redux/features/Cart/CartSlice";
 const ProductDetails = () => {
   const { id } = useParams();
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     data: Product,
     isLoading,
@@ -49,6 +52,17 @@ const ProductDetails = () => {
     } catch (error) {
       // toast.error(error?.data || error.message);
       toast.error(error?.data?.error || error?.message || error);
+    }
+  };
+  const addToCartHandler = async () => {
+    try {
+      dispatch(addToCart({ ...Product, qty }));
+
+      navigate("/");
+      toast.success(`${Product.name} is add to Cart`);
+    } catch (error) {
+      console.log(error?.message || error);
+      toast.error("server error ");
     }
   };
   return (
@@ -143,7 +157,7 @@ const ProductDetails = () => {
             </div>
             <div className="btn-container ">
               <button
-                // onClick={addToCartHandler}
+                onClick={addToCartHandler}
                 disabled={Product.countInStock === 0}
                 className="bg-pink-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0 cursor-pointer"
               >

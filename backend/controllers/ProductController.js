@@ -34,7 +34,7 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
   try {
     const { name, description, price, category, quantity, brand, image } =
       req.fields;
-  
+
     if (!name) return res.status(400).json({ error: "Name is required" });
     if (!description)
       return res.status(400).json({ error: "Description is required" });
@@ -179,5 +179,19 @@ export const fetchNewProduct = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error fetching New products:", error.message);
     res.status(500).json({ error: "Failed to fetch New products" });
+  }
+});
+
+export const filterdProduct = asyncHandler(async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const product = await Product.find(args);
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
   }
 });

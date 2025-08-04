@@ -25,7 +25,7 @@ const AdminMenu = () => {
           {/* Toggle Button */}
           <button
             aria-label="Toggle Admin Menu"
-            className="z-50 fixed top-4 right-4 p-3 bg-[#1f1f1f] hover:bg-[#2e2e2e] rounded-xl shadow-md transition duration-300"
+            className="z-50 fixed top-1 right-1 p-3 bg-[#1f1f1f] hover:bg-[#2e2e2e] rounded-xl shadow-md transition duration-300"
             onClick={toggleMenu}
           >
             {isMenuOpen ? (

@@ -1,11 +1,11 @@
 import React from "react";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import { useParams, Link } from "react-router-dom";
-import { useGetProductsQuery } from "./redux/api/ProductApiSlice";
-import Loader from "./components/Loader";
-import Message from "./components/Message";
-import Product from "./pages/Product/Product";
-import AdminMenu from "./pages/Admin/AdminMenu";
+import { useGetProductsQuery } from "../redux/api/ProductApiSlice";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import Product from "./Product/Product";
+import AdminMenu from "./Admin/AdminMenu";
 
 const Home = () => {
   const { keyword } = useParams();

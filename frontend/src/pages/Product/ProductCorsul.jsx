@@ -46,10 +46,10 @@ const ProductCorsul = () => {
   }
 
   return (
-    <div className="mb-8 xl:block lg:block md:block">
+    <div className="mb-8 xl:block lg:block md:block ">
       <Slider
         {...settings}
-        className="xl:w-[32rem] lg:w-[28rem] md:w-[26rem] sm:w-full"
+        className="xl:w-[28rem] lg:w-[28rem] md:w-[26rem] sm:w-full"
       >
         {products.map((product) => (
           <div
