@@ -4,7 +4,13 @@ import HeartIcon from "./HeartIcon";
 
 const SmallProduct = ({ product }) => {
   return (
-    <div className="w-full max-w-xs mx-auto p-4 bg-[#1e1e1e] rounded-lg shadow-md hover:shadow-xl transition-shadow">
+    <div
+      className="w-full max-w-xs mx-auto p-4 
+                 bg-[#1A1A1A]/95 border border-gray-700 
+                 rounded-2xl shadow-md hover:shadow-pink-500/20 
+                 transition-transform duration-300 hover:scale-[1.02]"
+    >
+      {/* Product Image */}
       <div className="relative">
         <img
           loading="lazy"
@@ -12,19 +18,27 @@ const SmallProduct = ({ product }) => {
           height="192"
           src={product.image}
           alt={product.name}
-          className="w-full h-48 object-cover rounded-md"
+          className="w-full h-44 object-cover rounded-lg transform group-hover:scale-105 transition duration-500"
         />
-        <HeartIcon product={product} />
-        <div className="mt-4">
-          <Link to={`/product/${product._id}`}>
-            <h2 className="text-white font-semibold text-lg truncate">
-              {product.name}
-            </h2>
-            <span className="mt-2 inline-block bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full dark:bg-pink-900 dark:text-pink-300">
-              ${product.price}
-            </span>
-          </Link>
+        {/* Wishlist Button */}
+        <div className="absolute top-2 right-2">
+          <HeartIcon product={product} />
         </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="mt-4">
+        <Link to={`/product/${product._id}`}>
+          <h2 className="text-white font-semibold text-base truncate hover:text-pink-400 transition">
+            {product.name}
+          </h2>
+        </Link>
+        <span
+          className="mt-2 inline-block bg-gradient-to-r from-pink-600 to-pink-400 
+                     text-white text-xs font-medium px-3 py-1 rounded-full"
+        >
+          ${product.price}
+        </span>
       </div>
     </div>
   );

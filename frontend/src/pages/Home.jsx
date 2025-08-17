@@ -13,7 +13,9 @@ const Home = () => {
 
   return (
     <>
+      {/* Show Header only when no search keyword */}
       {!keyword && <Header />}
+
       {isLoading ? (
         <Loader />
       ) : isError ? (
@@ -22,22 +24,37 @@ const Home = () => {
         </Message>
       ) : (
         <>
-          <div className="flex justify-between items-center max-w-screen-lg mx-auto mt-10">
-            <AdminMenu />
-            <h1 className="text-3xl font-bold">Special Products</h1>
+          {/* Top Section */}
+          <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto mt-12 px-6 gap-4">
+            <div className="w-full md:w-auto">
+              <AdminMenu />
+            </div>
+            <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
+              ✨ Special Products
+            </h1>
             <Link
               to="/shop"
-              className="bg-pink-600 text-white font-bold rounded-full py-2 px-10"
+              className="bg-gradient-to-r from-pink-600 to-pink-500 text-white font-semibold 
+                         rounded-full py-2 px-8 shadow-md shadow-pink-500/30 
+                         transition-all duration-300 hover:scale-105 hover:from-pink-500 hover:to-pink-400"
             >
-              Shop
+              Shop Now →
             </Link>
           </div>
-          <div className="flex justify-center flex-wrap mt-8">
-            {data?.product?.map((product) => (
-              <div key={product._id}>
-                <Product product={product} />
+
+          {/* Products Grid */}
+          <div className="max-w-7xl mx-auto mt-10 px-6">
+            {data?.product?.length === 0 ? (
+              <p className="text-center text-gray-400 text-lg">
+                No products found.
+              </p>
+            ) : (
+              <div className="ml-[4rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                {data?.product?.map((product) => (
+                  <Product key={product._id} product={product} />
+                ))}
               </div>
-            ))}
+            )}
           </div>
         </>
       )}
