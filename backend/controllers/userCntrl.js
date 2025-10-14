@@ -58,7 +58,7 @@ export const logInUser = asyncHandler(async (req, res) => {
     throw new Error("User not registered. Please register.");
   }
 
-  // Check password
+  // Check password hy
   const isPasswordValid = await bcrypt.compare(password, existingUser.password);
   if (!isPasswordValid) {
     res.status(401);
