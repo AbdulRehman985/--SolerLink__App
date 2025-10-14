@@ -44,8 +44,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 export const logInUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log(password);
+
   // Validate fields
   if (!email || !password) {
     res.status(400);
