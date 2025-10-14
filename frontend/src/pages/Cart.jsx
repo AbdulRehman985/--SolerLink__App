@@ -20,7 +20,7 @@ const Cart = () => {
     navigate("/login?redirect=/shipping");
   };
   return (
-    <div className="container flex justify-around items-start flex-wrap mx-auto mt-8">
+    <div className="container flex justify-around items-start text-white flex-wrap mx-auto mt-8">
       {cartItem.length === 0 ? (
         <div>
           your Cart is empty <Link to="/shop">Go back</Link>
@@ -47,13 +47,13 @@ const Cart = () => {
               </div>
               <div className="w-24">
                 <select
-                  className="w-full p-1 border rounded text-black"
+                  className="w-full p-2 border border-pinks-600 rounded bg-[#1E1E1E] text-white focus:outline-none focus:ring-2 focus:ring-pink-500"
                   value={item.qty}
                   onChange={(e) =>
                     addToCartHandler(item, Number(e.target.value))
                   }
                 >
-                  {[...Array(item.countInStock).keys()].map((x) => (
+                  {[...Array(item?.countInStock).keys()].map((x) => (
                     <option key={x + 1} value={x + 1}>
                       {x + 1}
                     </option>
@@ -65,7 +65,7 @@ const Cart = () => {
                   className="text-red-500 mr-[5rem]"
                   onClick={() => removeFromCartHandler(item._id)}
                 >
-                  <FaTrash className="ml-[1rem] mt-[1rem]" />
+                  <FaTrash className="ml-[1rem] mt-[1rem] cursor-pointer" />
                 </button>
               </div>
             </div>
@@ -82,7 +82,7 @@ const Cart = () => {
                   .toFixed(2)}
               </div>
               <button
-                className="bg-pink-500 mt-4 py-2 px-4 rounded-full text-lg w-full"
+                className="bg-pink-500 mt-4 py-2 px-4 rounded-full text-lg cursor-pointer w-full"
                 disabled={cartItem.length === 0}
                 onClick={checkOutHandler}
               >

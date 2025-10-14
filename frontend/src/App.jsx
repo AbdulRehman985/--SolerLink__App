@@ -3,11 +3,13 @@ import Navigation from "./pages/auth/Navigation";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
+import PrimarySearchAppBar from "./components/Navbar";
 
 function App() {
   return (
-    <div className="app-container bg-[#D2C1B6]">
+    <div className="app-container min-h-screen  bg-[#1E1E1E]">
       <ToastContainer />
+      <PrimarySearchAppBar />
       <Navigation />
       <main className="py-3">
         <Suspense

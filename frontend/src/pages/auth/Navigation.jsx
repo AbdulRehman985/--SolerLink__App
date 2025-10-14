@@ -41,10 +41,10 @@ const Navigation = () => {
   return (
     <div
       id="navigation-container"
-      className="fixed h-screen bg-black text-white flex flex-col justify-between p-4"
+      className="fixed  h-screen bg-black  text-white flex flex-col justify-between p-4"
     >
       {/* Top Links */}
-      <div className="flex flex-col gap-y-12">
+      <div className="flex flex-col gap-y-12 mt-12">
         <Link
           to="/"
           className="flex items-center hover:translate-x-2 transition-transform"

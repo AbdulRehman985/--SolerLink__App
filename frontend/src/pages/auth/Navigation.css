@@ -12,7 +12,6 @@
   z-index: 999;
 }
 
-
 #navigation-container:hover {
   width: 15%;
 }
@@ -26,4 +25,15 @@
 #navigation-container:hover .nav-item-name {
   display: block;
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  #navigation-container {
+    display: none;
+    width: 0px;
+  }
+
+  #bottom-navigation {
+    display: flex;
+  }
 }

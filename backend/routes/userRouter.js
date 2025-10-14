@@ -31,4 +31,3 @@ userRouter
   .get(authitacted, authorizedIsAdmin, getUserById)
   .put(authitacted, authorizedIsAdmin, updateById);
 export default userRouter;
-//  "password": "password12"

@@ -7,17 +7,13 @@ import ProductCorsul from "../pages/Product/ProductCorsul";
 const Header = () => {
   const { data, isLoading, error } = useGettopProductQuery();
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <div>Error loading products</div>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <div>Error loading products</div>;
 
   return (
-    <div className="flex justify-around xl:ml-20">
-      <div className="xl:block lg:hidden md:hidden sm:hidden">
+    <div className="flex flex-col xl:flex-row justify-center xl:justify-start gap-8 xl:ml-20">
+      {/* Grid only on XL screens */}
+      <div className="hidden xl:block">
         <div className="grid grid-cols-2 gap-4">
           {data?.map((product) => (
             <div key={product._id}>
@@ -26,7 +22,11 @@ const Header = () => {
           ))}
         </div>
       </div>
-      <ProductCorsul />
+
+      {/* Carousel always visible */}
+      <div className="flex justify-center w-full xl:w-auto">
+        <ProductCorsul />
+      </div>
     </div>
   );
 };

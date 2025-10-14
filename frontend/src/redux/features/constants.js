@@ -3,3 +3,4 @@ export const USERS_URL = "/api/user";
 export const Category_URL = "/api/category";
 export const Product_URL = "/api/product";
 export const Upload_URL = "/api/upload";
+export const Order_URL = "/api/orders";

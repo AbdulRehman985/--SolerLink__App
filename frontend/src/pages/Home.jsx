@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Product from "./Product/Product";
 import AdminMenu from "./Admin/AdminMenu";
+import PrimarySearchAppBar from "../components/Navbar";
 
 const Home = () => {
   const { keyword } = useParams();

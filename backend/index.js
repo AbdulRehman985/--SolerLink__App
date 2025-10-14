@@ -9,6 +9,7 @@ import userRouter from "./routes/userRouter.js";
 import categoryRouter from "./routes/CategoryRouter.js";
 import productRouter from "./routes/ProductRouter.js";
 import UploadRouter from "./routes/FileUploadRouter.js";
+import { OrderRouter } from "./routes/OrderRouter.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -27,6 +28,7 @@ app.use("/api/user", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/product", productRouter);
 app.use("/api/upload", UploadRouter);
+app.use("/api/orders", OrderRouter);
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 app.listen(port, () => {
