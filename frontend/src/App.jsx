@@ -7,9 +7,9 @@ import PrimarySearchAppBar from "./components/Navbar";
 
 function App() {
   return (
-    <div className="app-container min-h-screen  bg-[#1E1E1E]">
+    <div className="app-container min-h-screen    bg-[#111827]">
       <ToastContainer />
-      <PrimarySearchAppBar />
+      {/* <PrimarySearchAppBar /> */}
       <Navigation />
       <main className="py-3">
         <Suspense

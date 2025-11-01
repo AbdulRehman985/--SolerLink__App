@@ -5,9 +5,9 @@ import HeartIcon from "./HeartIcon";
 const Product = ({ product }) => {
   return (
     <div
-      className="group relative bg-[#1A1A1A]/95 border border-gray-700 
-                 rounded-2xl shadow-md overflow-hidden hover:shadow-pink-500/20 
-                 transition-transform duration-300 hover:scale-[1.02]"
+      className="group relative bg-[#121212] border border-[#2a2a2a] 
+                 rounded-2xl shadow-md hover:shadow-[0_0_25px_rgba(255,182,193,0.2)]
+                 overflow-hidden transition-transform duration-300 hover:scale-[1.03]"
     >
       {/* Product Image */}
       <div className="relative overflow-hidden">
@@ -28,20 +28,32 @@ const Product = ({ product }) => {
       <div className="p-4">
         <Link to={`/product/${product._id}`}>
           <h2
-            className="text-lg font-semibold text-white truncate 
-                       group-hover:text-pink-400 transition"
+            className="text-lg font-semibold text-gray-200 leading-snug 
+                       hover:text-pink-400 transition-all duration-300 line-clamp-2"
           >
             {product.name}
           </h2>
         </Link>
 
+        {/* Brand */}
+        <p className="text-sm text-gray-400 mt-1">{product.brand}</p>
+
         {/* Price Badge */}
-        <span
-          className="inline-block mt-2 bg-gradient-to-r from-pink-600 to-pink-400 
-                     text-white text-sm font-medium px-3 py-1 rounded-full shadow"
-        >
-          ${product.price}
-        </span>
+        <div className="flex items-center justify-between mt-3">
+          <span
+            className="inline-block bg-gradient-to-r from-pink-600 via-orange-400 to-yellow-400 
+                       text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md"
+          >
+            ${product.price}
+          </span>
+
+          <Link
+            to={`/product/${product._id}`}
+            className="text-sm font-medium text-pink-400 hover:text-pink-300 transition"
+          >
+            View Details →
+          </Link>
+        </div>
       </div>
     </div>
   );

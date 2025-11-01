@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // fixed incorrect import
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../redux/api/userApiSlice";
 import { toast } from "react-toastify";
-import Loader from "../../components/Loader";
 import { setCredentials } from "../../redux/features/auth/authSlice";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +29,7 @@ const Login = () => {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      toast.success("Logged in successfully");
+      toast.success("Logged in successfully!");
       navigate(redirect);
     } catch (error) {
       toast.error(error?.data?.message || "Login failed");
@@ -37,49 +37,60 @@ const Login = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 bg-gray-900 text-white">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight">
-            Sign in to your account
+    <motion.section
+      className="min-h-screen flex items-center justify-center px-4  text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="max-w-md w-full space-y-8 bg-[#111]/90 backdrop-blur-xl border border-gray-800 p-8 rounded-2xl shadow-2xl"
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Header */}
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-yellow-400 tracking-wide">
+            Sign in to SolarLink
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
+          <p className="mt-2 text-sm text-gray-400">
             New here?{" "}
             <Link
               to={redirect ? `/register?redirect=${redirect}` : "/register"}
-              className="text-pink-500 font-medium hover:underline"
+              className="text-yellow-400 font-medium hover:underline"
             >
-              Register
+              Create an account
             </Link>
           </p>
         </div>
 
-        <form
-          onSubmit={onSubmitHandler}
-          className="space-y-6 bg-gray-800 p-8 rounded-xl shadow-lg"
-        >
+        {/* Form */}
+        <form onSubmit={onSubmitHandler} className="space-y-6">
+          {/* Email */}
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-gray-300"
             >
-              Email address
+              Email Address
             </label>
             <input
               type="email"
               id="email"
               required
-              className="mt-1 w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
+              className="mt-2 w-full px-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
             />
           </div>
 
+          {/* Password */}
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-gray-300"
             >
               Password
             </label>
@@ -87,25 +98,27 @@ const Login = () => {
               type="password"
               id="password"
               required
-              className="mt-1 w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               value={password}
               onChange={(e) => setpassword(e.target.value)}
               placeholder="Enter your password"
+              className="mt-2 w-full px-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
             />
           </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-2 px-4 bg-pink-600 hover:bg-pink-700 transition text-white font-semibold rounded-md disabled:opacity-50"
-            >
-              {isLoading ? "Signing in..." : "Sign In"}
-            </button>
-          </div>
+          {/* Button */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            disabled={isLoading}
+            type="submit"
+            className="w-full py-3 bg-yellow-500 hover:bg-yellow-600 transition-all text-black font-semibold rounded-lg shadow-md shadow-yellow-500/30 disabled:opacity-50"
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
+          </motion.button>
         </form>
-      </div>
-    </section>
+
+      </motion.div>
+    </motion.section >
   );
 };
 

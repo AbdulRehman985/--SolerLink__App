@@ -16,8 +16,8 @@ const ProductCard = ({ p }) => {
 
   return (
     <div
-      className="group relative max-w-sm bg-[#1A1A1A]/95 border border-gray-700 
-      rounded-2xl shadow-md overflow-hidden hover:shadow-pink-500/20 
+      className="group relative max-w-sm bg-[#1f2937] border border-gray-700 
+      rounded-2xl shadow-lg overflow-hidden hover:shadow-yellow-500/20 
       transition-transform duration-300 hover:scale-[1.02]"
     >
       {/* Wishlist Icon */}
@@ -41,28 +41,29 @@ const ProductCard = ({ p }) => {
       <div className="p-4">
         {/* Brand Tag */}
         <span
-          className="inline-block bg-gradient-to-r from-pink-600 to-pink-400 
-          text-white text-[11px] px-3 py-1 rounded-full font-medium mb-3"
+          className="inline-block bg-gradient-to-r from-yellow-500 to-yellow-400 
+          text-black text-[11px] px-3 py-1 rounded-full font-semibold mb-3"
         >
           {p.brand}
         </span>
 
         <Link to={`/product/${p._id}`}>
-          <h3 className="text-white text-lg font-semibold truncate group-hover:text-pink-400 transition">
+          <h3 className="text-white text-lg font-semibold truncate group-hover:text-yellow-400 transition">
             {p.name}
           </h3>
         </Link>
 
         {/* Price + Add to Cart */}
         <div className="flex items-center justify-between mt-3">
-          <p className="text-pink-400 font-bold text-lg">${p.price}</p>
+          <p className="text-yellow-400 font-bold text-lg">${p.price}</p>
 
-          {/* Add to Cart Floating Button */}
+          {/* Add to Cart Button */}
           <button
             className="flex items-center justify-center w-11 h-11 rounded-full 
-                       bg-gradient-to-r from-pink-600 to-pink-500 text-white 
-                       shadow-md shadow-pink-500/30 transition-all duration-300 
-                       hover:scale-110 hover:rotate-6 hover:from-pink-500 hover:to-pink-400"
+                       bg-gradient-to-r from-yellow-500 to-yellow-400 text-black 
+                       font-semibold shadow-md shadow-yellow-400/40 
+                       transition-all duration-300 hover:scale-110 hover:rotate-6 
+                       hover:from-yellow-400 hover:to-yellow-300"
             onClick={() => addToCartHandler(p, 1)}
           >
             <AiOutlineShoppingCart size={20} />

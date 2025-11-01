@@ -1,4 +1,3 @@
-import { request } from "express";
 import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema(
@@ -70,7 +69,7 @@ const orderSchema = mongoose.Schema(
       type: Date,
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 const Order = mongoose.model("Order", orderSchema);

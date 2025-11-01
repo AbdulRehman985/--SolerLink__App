@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useProfileMutation } from "../../redux/api/userApiSlice";
 import { toast } from "react-toastify";
-import { setCredentials } from "../../Redux/Features/auth/authSlice";
+import { setCredentials } from "../../redux/features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const [username, setUsername] = useState("");
@@ -15,6 +16,7 @@ const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (userInfo) {
       setUsername(userInfo.username);
@@ -24,7 +26,6 @@ const Profile = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
@@ -39,7 +40,7 @@ const Profile = () => {
       }).unwrap();
 
       dispatch(setCredentials({ ...res }));
-      toast.success("Profile updated successfully.");
+      toast.success("Profile updated successfully!");
       navigate("/");
     } catch (error) {
       toast.error(error?.data?.msg || "Failed to update profile.");
@@ -47,77 +48,99 @@ const Profile = () => {
   };
 
   return (
-    // (Keep all imports as you already have them)
-
-    <div className="container mx-auto px-4 py-8 max-w-xl mt-5">
-      <div className="bg-gray-900 shadow rounded-lg p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-white">Update Profile</h2>
+    <motion.div
+      className="flex justify-center items-center min-h-[80vh] px-4 "
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="w-full max-w-lg bg-[#111]/90 backdrop-blur-xl border border-gray-800 p-6 rounded-2xl shadow-2xl text-white"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-yellow-400 tracking-wide">
+            Update Profile
+          </h2>
           <Link
             to="/user-orders"
-            className="text-sm bg-amber-600 hover:bg-amber-700 text-white px-3 py-1 rounded transition"
+            className="text-sm bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg transition-all font-medium text-black"
           >
             My Orders
           </Link>
         </div>
 
-        <form onSubmit={onSubmitHandler} className="space-y-4">
+        {/* Form */}
+        <form onSubmit={onSubmitHandler} className="space-y-5">
+          {/* Username */}
           <div>
-            <label className="block text-gray-300 text-sm mb-1">Name</label>
+            <label className="block text-gray-400 mb-1">Username</label>
             <input
               type="text"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:ring-blue-500 focus:outline-none text-sm"
-              placeholder="Enter Name"
               value={username}
-              required
               onChange={(e) => setUsername(e.target.value)}
+              required
+              placeholder="Enter your name"
+              className="w-full px-4 py-2 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
             />
           </div>
+
+          {/* Email */}
           <div>
-            <label className="block text-gray-300 text-sm mb-1">Email</label>
+            <label className="block text-gray-400 mb-1">Email Address</label>
             <input
               type="email"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:ring-blue-500 focus:outline-none text-sm"
-              placeholder="Enter Email"
               value={email}
               required
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-gray-300 text-sm mb-1">Password</label>
-            <input
-              type="password"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:ring-blue-500 focus:outline-none text-sm"
-              placeholder="Enter Password"
-              value={password}
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
+
+          {/* Password Fields */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-400 mb-1">New Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="w-full px-4 py-2 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-400 mb-1">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
+                className="w-full px-4 py-2 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-gray-300 text-sm mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:ring-blue-500 focus:outline-none text-sm"
-              placeholder="Enter Confirm Password"
-              value={confirmPassword}
-              required
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-          <button
-            type="submit"
+
+          {/* Submit */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded text-sm font-medium transition-all"
+            type="submit"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 py-3 rounded-lg font-semibold text-black transition-all duration-300 shadow-md shadow-yellow-500/30"
           >
             {isLoading ? "Updating..." : "Update Profile"}
-          </button>
+          </motion.button>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

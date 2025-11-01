@@ -22,78 +22,59 @@ const CategoryList = () => {
 
   const handleCreateCategory = async (e) => {
     e.preventDefault();
-    if (!name) {
-      toast.error("Category name is required");
-      return;
-    }
-
+    if (!name) return toast.error("Category name is required");
     try {
       const res = await createCategory({ name }).unwrap();
-      toast.success(`${res.name} is created`);
+      toast.success(`${res.name} created successfully`);
       setName("");
     } catch (error) {
-      toast.error(error?.data?.error || "Category not saved. Try again.");
-      console.error("Create Category Error:", error);
+      toast.error(error?.data?.error || "Failed to save category");
     }
   };
 
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
-    if (!updateName) {
-      toast.error("Category is required");
-      return;
-    }
+    if (!updateName) return toast.error("Category is required");
     try {
       const result = await updateCategory({
         categoryID: selectedCategory._id,
-        updateCategory: {
-          name: updateName,
-        },
+        updateCategory: { name: updateName },
       }).unwrap();
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success(`${result.name} is updated`);
-        setSelectedCategory(null);
-        setUpdateName("");
-        setModelVisible(false);
-      }
+      toast.success(`${result.name} updated successfully`);
+      setSelectedCategory(null);
+      setUpdateName("");
+      setModelVisible(false);
     } catch (error) {
-      console.log(error);
-      toast.error(error?.message);
+      toast.error(error?.message || "Update failed");
     }
   };
+
   const handleDeleteCategory = async (e) => {
     e.preventDefault();
     try {
       const result = await deleteCategory({
         categoryID: selectedCategory._id,
       }).unwrap();
-
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success(`${result.name} is Deleted`);
-        setSelectedCategory(null);
-        setModelVisible(false);
-      }
+      toast.success(`${result.name} deleted`);
+      setSelectedCategory(null);
+      setModelVisible(false);
     } catch (error) {
-      console.log(error);
-      toast.error(error?.message);
+      toast.error(error?.message || "Delete failed");
     }
   };
+
   return (
-    <div className="ml-0 md:ml-40 px-4 py-6">
+    <div className="ml-0 md:ml-16 px-4 md:px-6 py-6 text-white min-h-screen">
       <AdminMenu />
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          Manage Categories
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-400">
+          ⚙️ Manage Categories
         </h2>
 
-        {/* Category Form */}
-        <div className="bg-white rounded-xl shadow p-6 mb-10">
-          <h3 className="text-lg font-semibold mb-4 text-gray-700">
-            Add New Category
+        {/* Add Category Form */}
+        <div className="bg-[#101113] border border-gray-700 rounded-xl shadow-md shadow-yellow-500/10 p-5 mb-8">
+          <h3 className="text-lg font-semibold mb-4 text-yellow-400">
+            ➕ Add New Category
           </h3>
           <CategoryForm
             value={name}
@@ -102,39 +83,47 @@ const CategoryList = () => {
           />
         </div>
 
-        {/* Divider */}
-        <hr className="border-t border-gray-300 my-6" />
-
-        {/* Category List */}
+        {/* Existing Categories */}
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-700">
-            Existing Categories
+          <h3 className="text-lg font-semibold mb-4 text-yellow-400">
+            📂 Existing Categories
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {categories?.map((category) => (
-              <button
-                key={category._id}
-                className="bg-pink-50 text-pink-600 border border-pink-400 rounded-lg py-2 px-4 hover:bg-pink-500 hover:text-white transition duration-200"
-                onClick={() => {
-                  setModelVisible(true);
-                  setSelectedCategory(category);
-                  setUpdateName(category.name);
-                }}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-          <Model isOpen={modelVisible} onclose={() => setModelVisible(false)}>
-            <CategoryForm
-              value={updateName}
-              setValue={(e) => setUpdateName(e)}
-              buttonText="Update"
-              handleSubmit={handleUpdateCategory}
-              handleDeleted={handleDeleteCategory}
-            />
-          </Model>
+
+          {categories?.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category._id}
+                  onClick={() => {
+                    setModelVisible(true);
+                    setSelectedCategory(category);
+                    setUpdateName(category.name);
+                  }}
+                  className="bg-gradient-to-r from-yellow-400/20 to-orange-400/10 
+                    border border-yellow-500/30 rounded-lg py-2 px-4 
+                    hover:from-yellow-400/40 hover:to-orange-400/30 
+                    hover:border-yellow-400 text-yellow-300 font-medium 
+                    shadow-md hover:shadow-yellow-400/20 transition-all duration-300 text-sm"
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">No categories found.</p>
+          )}
         </div>
+
+        {/* Modal for Update/Delete */}
+        <Model isOpen={modelVisible} onclose={() => setModelVisible(false)}>
+          <CategoryForm
+            value={updateName}
+            setValue={setUpdateName}
+            buttonText="Update"
+            handleSubmit={handleUpdateCategory}
+            handleDeleted={handleDeleteCategory}
+          />
+        </Model>
       </div>
     </div>
   );

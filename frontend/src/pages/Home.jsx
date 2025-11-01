@@ -25,25 +25,27 @@ const Home = () => {
         </Message>
       ) : (
         <>
-          {/* Top Section */}
+          {/* 🔝 Top Section */}
           <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto mt-12 px-6 gap-4">
             <div className="w-full md:w-auto">
               <AdminMenu />
             </div>
-            <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
-              ✨ Special Products
+
+            <h1 className="text-2xl md:text-4xl font-extrabold text-yellow-400 tracking-tight drop-shadow-lg">
+              ☀️ Special Solar Products
             </h1>
+
             <Link
               to="/shop"
-              className="bg-gradient-to-r from-pink-600 to-pink-500 text-white font-semibold 
-                         rounded-full py-2 px-8 shadow-md shadow-pink-500/30 
-                         transition-all duration-300 hover:scale-105 hover:from-pink-500 hover:to-pink-400"
+              className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-black font-semibold 
+                         rounded-full py-2 px-8 shadow-lg shadow-yellow-500/40 
+                         transition-all duration-300 hover:scale-105 hover:from-yellow-400 hover:to-yellow-300"
             >
               Shop Now →
             </Link>
           </div>
 
-          {/* Products Grid */}
+          {/* 🛍️ Products Grid */}
           <div className="max-w-7xl mx-auto mt-10 px-6">
             {data?.product?.length === 0 ? (
               <p className="text-center text-gray-400 text-lg">

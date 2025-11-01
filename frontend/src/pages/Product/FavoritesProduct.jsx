@@ -20,11 +20,11 @@ const FavoritesProduct = () => {
   }
 
   return (
-    <div className="ml-[10rem] min-h-screen">
-      <h1 className="text-lg font-bold ml-[3rem] mt-[3rem]">
+    <div className="ml-20 min-h-screen">
+      <h1 className="text-lg font-bold ml-[3rem] my-5 text-white">
         FAVORITE PRODUCTS
       </h1>
-      <div className="flex flex-wrap">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {favorites
           .filter((product) => product && product._id)
           .map((product) => (

@@ -41,7 +41,7 @@ const Updateproduct = () => {
       setStock(productData.countInStock);
     }
   }, [productData]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,7 +107,7 @@ const Updateproduct = () => {
       {image && (
         <div className="flex justify-center mb-4">
           <img
-            src={`http://localhost:5001${image}`}
+            src={image}
             alt="product"
             className="h-48 object-contain rounded-lg"
           />

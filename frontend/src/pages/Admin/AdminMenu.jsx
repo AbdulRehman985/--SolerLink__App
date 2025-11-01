@@ -51,10 +51,9 @@ const AdminMenu = () => {
                       to={item.to}
                       onClick={closeMenu}
                       className={({ isActive }) =>
-                        `block py-2 px-4 rounded-lg transition duration-200 ${
-                          isActive
-                            ? "bg-[#2e2e2e] border-l-4 border-green-400 text-green-300"
-                            : "hover:bg-[#2e2e2e]"
+                        `block py-2 px-4 rounded-lg transition duration-200 ${isActive
+                          ? "bg-[#2e2e2e] border-l-4 border-green-400 text-green-300"
+                          : "hover:bg-[#2e2e2e]"
                         }`
                       }
                     >

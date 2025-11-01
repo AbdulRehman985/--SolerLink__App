@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  background-color: #000; /* or your sidebar bg */
+  background-color: #040b1d; /* or your sidebar bg */
   width: 6%;
   transition: width 0.3s ease-in-out;
   overflow-x: hidden;

@@ -41,7 +41,7 @@ const Navigation = () => {
   return (
     <div
       id="navigation-container"
-      className="fixed  h-screen bg-black  text-white flex flex-col justify-between p-4"
+      className="fixed  h-screen bg-black   text-white flex flex-col justify-between p-4"
     >
       {/* Top Links */}
       <div className="flex flex-col gap-y-12 mt-12">
@@ -95,9 +95,8 @@ const Navigation = () => {
             >
               <span className="nav-item-name">{userInfo.username}</span>
               <svg
-                className={`h-4 w-4 ml-1 transform transition-transform ${
-                  dropDownOpen ? "rotate-180" : ""
-                }`}
+                className={`h-4 w-4 ml-1 transform transition-transform ${dropDownOpen ? "rotate-180" : ""
+                  }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="white"

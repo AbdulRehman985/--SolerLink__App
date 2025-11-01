@@ -17,12 +17,20 @@ import {
   updateProductDetails,
 } from "../controllers/ProductController.js";
 import checkId from "../middleware/CheckId.js";
+import { uploadToCloudinary } from "../middleware/uploadToCloudinary.js";
+import upload from "../middleware/multer.js";
 const productRouter = express.Router();
 
 productRouter
   .route("/")
   .get(fetchProduct)
-  .post(authitacted, authorizedIsAdmin, formidable(), addProduct);
+  .post(
+    uploadToCloudinary,
+    authitacted,
+    authorizedIsAdmin,
+    formidable(),
+    addProduct
+  );
 productRouter.route("/allproducts").get(fetchallProduct);
 productRouter
   .route("/:id/reviews")

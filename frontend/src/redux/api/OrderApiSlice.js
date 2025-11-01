@@ -24,6 +24,7 @@ export const OrderApiSlice = apiSlice.injectEndpoints({
     getOrders: builder.query({
       query: () => ({
         url: Order_URL,
+        credentials: "include",
       }),
     }),
 
@@ -40,6 +41,7 @@ export const OrderApiSlice = apiSlice.injectEndpoints({
     getMyOrders: builder.query({
       query: () => ({
         url: `${Order_URL}/mine`,
+        credentials: "include",
       }),
       keepUnusedDataFor: 5,
     }),
@@ -48,6 +50,7 @@ export const OrderApiSlice = apiSlice.injectEndpoints({
     deliverOrder: builder.mutation({
       query: (orderId) => ({
         url: `${Order_URL}/${orderId}/deliver`,
+        credentials: "include",
         method: "PUT",
       }),
     }),
