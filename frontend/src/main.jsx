@@ -26,7 +26,7 @@ import PlaceOrders from "./pages/Orders/PlaceOrders.jsx";
 import Order from "./pages/Orders/Order.jsx";
 import UserOrder from "./pages/User/UserOrder.jsx";
 import OrderList from "./pages/Admin/OrderList.jsx";
-// import Dashboard from "./pages/Admin/Dashboard.jsx";
+import Dashboard from "./pages/Admin/Dashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,7 +52,7 @@ const router = createBrowserRouter(
         <Route path="allproduct" element={<AllProduct />} />
         <Route path="orderlist" element={<OrderList />} />
         <Route path="product/update/:_id" element={<Updateproduct />} />
-        {/* <Route path="dashboard" element={<Dashboard />} /> */}
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Route>
   )

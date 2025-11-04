@@ -123,7 +123,7 @@ const ProductDetails = () => {
                 </p>
                 <Rating
                   value={Product.rating}
-                  text={`${Product.numReviews} Reviews`}
+                  text={` Reviews:${Product.numReviews}`}
                 />
               </div>
 

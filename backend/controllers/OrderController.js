@@ -132,7 +132,7 @@ export const calculateTotalSaleByDates = expressAsyncHandler(
           },
         },
         {
-          $sort: { _id: 1 }, // sorts by date ascending
+          $sort: { _id: 1 },
         },
       ]);
 
@@ -165,12 +165,12 @@ export const markOrderAsPaid = expressAsyncHandler(async (req, res) => {
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
-      order.paymentResult = {
-        id: req.body.id,
-        status: req.body.status,
-        update_time: req.body.update_time,
-        email_address: req.body.payer.email_address,
-      };
+      // order.paymentResult = {
+      //   id: req.body.id,
+      //   status: req.body.status,
+      //   update_time: req.body.update_time,
+      //   email_address: req.body.payer.email_address,
+      // };
       const updateOrder = await order.save();
       res.status(201).json(updateOrder);
     } else {

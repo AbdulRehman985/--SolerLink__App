@@ -58,7 +58,7 @@ export const OrderApiSlice = apiSlice.injectEndpoints({
     // Get total orders (Admin dashboard)
     getTotalOrders: builder.query({
       query: () => ({
-        url: `${Order_URL}/total-orders`,
+        url: `${Order_URL}/total-order`,
       }),
     }),
 
