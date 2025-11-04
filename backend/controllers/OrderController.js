@@ -1,6 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import { Product } from "../models/ProductModel.js";
 import Order from "../models/OrderModel.js";
+import { User } from "../models/userModel.js";
 
 function calcPrice(orderItems) {
   const itemsPrice = orderItems.reduce(
@@ -68,13 +69,69 @@ export const createOrder = expressAsyncHandler(async (req, res) => {
     console.error(error);
   }
 });
-
 export const getAllOrders = expressAsyncHandler(async (req, res) => {
   try {
-    const getAllOrders = await Order.find({}).populate("user", "id username");
-    res.json(getAllOrders);
+    const { page = 1, pageSize = 10, sort = null, search = "" } = req.query;
+
+    const skip = (Number(page) - 1) * Number(pageSize);
+
+    // Handle sorting
+    const generateSort = () => {
+      try {
+        const sortParsed = JSON.parse(sort);
+        return sortParsed?.field
+          ? { [sortParsed.field]: sortParsed.sort === "asc" ? 1 : -1 }
+          : {};
+      } catch {
+        return {};
+      }
+    };
+    const sortFormated = sort ? generateSort() : {};
+
+    const isNumeric = !isNaN(Number(search));
+    let searchFilter = {};
+
+    if (search) {
+      if (isNumeric) {
+        // Search by totalPrice
+        searchFilter = { totalPrice: Number(search) };
+      } else {
+        // Find matching users first
+        const matchedUsers = await User.find({
+          username: { $regex: search, $options: "i" },
+        }).select("_id");
+
+        // Extract their IDs
+        const userIds = matchedUsers.map((u) => u._id);
+
+        // Build combined search filter
+        searchFilter = {
+          $or: [
+            { user: { $in: userIds } }, // match by user
+            { paymentMethod: { $regex: search, $options: "i" } },
+          ],
+        };
+      }
+    }
+
+    // Query orders
+    const orders = await Order.find(searchFilter)
+      .populate("user", "username email")
+      .sort(sortFormated)
+      .skip(skip)
+      .limit(Number(pageSize));
+
+    const total = await Order.countDocuments(searchFilter);
+
+    res.status(200).json({
+      orders,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / pageSize),
+    });
   } catch (error) {
-    res.status(500).json({ error: error?.message || error });
+    console.error("Error fetching orders:", error.message);
+    res.status(500).json({ message: error.message });
   }
 });
 

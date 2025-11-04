@@ -22,9 +22,10 @@ export const OrderApiSlice = apiSlice.injectEndpoints({
 
     // Get all orders (Admin)
     getOrders: builder.query({
-      query: () => ({
+      query: ({ page, pageSize, sort, search }) => ({
         url: Order_URL,
         credentials: "include",
+        params: { page, pageSize, sort, search },
       }),
     }),
 
