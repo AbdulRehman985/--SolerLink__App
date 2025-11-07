@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import {
+  FaTrash,
+  FaEdit,
+  FaCheck,
+  FaTimes,
+  FaUserShield,
+} from "react-icons/fa";
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
@@ -9,17 +15,34 @@ import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
 import AdminMenu from "./AdminMenu";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 
-const Userlist = () => {
-  const { data: users, isLoading, error, refetch } = useGetUsersQuery();
-  const [deleteUser] = useDeleteUserMutation();
-  const [updateUser] = useUpdateUserMutation();
+const AdminUserList = () => {
   const dispatch = useDispatch();
-  const [editableUserId, setEditableUserId] = useState(null);
+  const { userInfo } = useSelector((state) => state.auth);
+
+
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(8);
+  const [sort] = useState({});
+  const [search, setSearch] = useState("");
+
+
+  const [editMode, setEditMode] = useState(null);
   const [editableUserName, setEditableUserName] = useState("");
   const [editableUserEmail, setEditableUserEmail] = useState("");
+
+
+  const { data, isLoading, error, refetch } = useGetUsersQuery({
+    page,
+    pageSize,
+    sort: JSON.stringify(sort),
+    search,
+  });
+
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   const deleteHandler = async (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
@@ -27,22 +50,17 @@ const Userlist = () => {
         await deleteUser(id).unwrap();
         toast.success("User deleted successfully");
         refetch();
-      } catch (error) {
-        toast.error(error?.data?.message || error.message);
+      } catch (err) {
+        toast.error(err?.data?.message || "Delete failed");
       }
     }
   };
 
-  const toggleEdit = (id, username, email) => {
-    setEditableUserId(id);
-    setEditableUserName(username);
-    setEditableUserEmail(email);
-  };
 
-  const cancelEdit = () => {
-    setEditableUserId(null);
-    setEditableUserName("");
-    setEditableUserEmail("");
+  const toggleEdit = (user) => {
+    setEditMode(user._id);
+    setEditableUserName(user.username);
+    setEditableUserEmail(user.email);
   };
 
   const updateHandler = async (id) => {
@@ -52,122 +70,197 @@ const Userlist = () => {
         username: editableUserName,
         email: editableUserEmail,
       }).unwrap();
-      dispatch(setCredentials(updatedUser));
+
+      if (userInfo._id === updatedUser._id) {
+        dispatch(setCredentials(updatedUser));
+      }
+
       toast.success("User updated successfully");
-      cancelEdit();
+      setEditMode(null);
       refetch();
-    } catch (error) {
-      toast.error(error?.data?.message || error.message);
+    } catch (err) {
+      toast.error(err?.data?.message || "Update failed");
     }
   };
 
   if (isLoading) return <Loader />;
-
   if (error)
     return (
       <Message variant="danger">
-        {error?.data?.message || error.message}
+        {error?.data?.message || "Something went wrong"}
       </Message>
     );
 
+  const totalPages = data?.totalPages || 1;
+  const users = data?.users || [];
+
   return (
-    <div className="w-full max-w-5xl mx-auto overflow-x-auto rounded-2xl shadow-2xl border border-gray-700 bg-gray-950 p-6">
+    <div className="max-w-6xl mx-auto py-6 px-4 text-white">
       <AdminMenu />
-      <table className="w-full table-auto text-sm text-left">
-        <thead className="bg-gray-800 text-gray-300 text-sm uppercase tracking-wider">
-          <tr>
-            <th className="px-4 py-3">ID</th>
-            <th className="px-4 py-3">Name</th>
-            <th className="px-4 py-3">Email</th>
-            <th className="px-4 py-3 text-center">Admin</th>
-            <th className="px-4 py-3 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="bg-gray-900 divide-y divide-gray-800 text-white">
-          {users?.map((user) => (
-            <tr
-              key={user._id}
-              className="hover:bg-gray-850 transition-all duration-200"
-            >
-              <td className="px-4 py-3 max-w-[180px] truncate">{user._id}</td>
 
-              <td className="px-4 py-3">
-                {editableUserId === user._id ? (
-                  <input
-                    type="text"
-                    value={editableUserName}
-                    onChange={(e) => setEditableUserName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring focus:ring-blue-500"
-                  />
-                ) : (
-                  user.username
-                )}
-              </td>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <h2 className="text-3xl font-semibold text-center sm:text-left">
+          Manage Users
+        </h2>
 
-              <td className="px-4 py-3">
-                {editableUserId === user._id ? (
-                  <input
-                    type="email"
-                    value={editableUserEmail}
-                    onChange={(e) => setEditableUserEmail(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring focus:ring-blue-500"
-                  />
-                ) : (
-                  user.email
-                )}
-              </td>
 
-              <td className="px-4 py-3 text-center">
-                {user.isAdmin ? (
-                  <FaCheck className="text-green-500 text-lg" />
-                ) : (
-                  <FaTimes className="text-red-500 text-lg" />
-                )}
-              </td>
+        <div className="relative w-full sm:w-72">
+          <input
+            type="text"
+            placeholder="Search by username or email..."
+            className="w-full rounded-full px-5 py-2 bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-pink-500 outline-none placeholder-gray-400 text-sm"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+          <svg
+            className="w-5 h-5 absolute right-4 top-2.5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
+            />
+          </svg>
+        </div>
+      </div>
 
-              <td className="px-4 py-3 text-center space-x-2">
-                {editableUserId === user._id ? (
-                  <>
-                    <button
-                      onClick={() => updateHandler(user._id)}
-                      className="inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
-                    >
-                      <FaCheck />
-                    </button>
-                    <button
-                      onClick={cancelEdit}
-                      className="inline-flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition"
-                    >
-                      <FaTimes />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={() =>
-                        toggleEdit(user._id, user.username, user.email)
-                      }
-                      className="inline-flex items-center justify-center px-3 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-lg transition"
-                    >
-                      <FaEdit />
-                    </button>
-                    {!user.isAdmin && (
-                      <button
-                        onClick={() => deleteHandler(user._id)}
-                        className="inline-flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
-                      >
-                        <FaTrash />
-                      </button>
-                    )}
-                  </>
-                )}
-              </td>
+      <div className="overflow-x-auto rounded-2xl shadow-lg bg-gray-900">
+        <table className="min-w-full text-sm text-left border-collapse">
+          <thead className="bg-gray-800 text-sm uppercase text-gray-400">
+            <tr>
+              <th className="py-3 px-4">Username</th>
+              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">Role</th>
+              <th className="py-3 px-4 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="4"
+                  className="py-6 text-center text-gray-400 font-medium"
+                >
+                  No users found.
+                </td>
+              </tr>
+            ) : (
+              users.map((user) => (
+                <tr
+                  key={user._id}
+                  className="border-b border-gray-700 hover:bg-gray-800 transition duration-200"
+                >
+
+                  <td className="py-3 px-4">
+                    {editMode === user._id ? (
+                      <input
+                        type="text"
+                        className="bg-gray-700 p-1 rounded w-full"
+                        value={editableUserName}
+                        onChange={(e) => setEditableUserName(e.target.value)}
+                      />
+                    ) : (
+                      user.username
+                    )}
+                  </td>
+
+
+                  <td className="py-3 px-4">
+                    {editMode === user._id ? (
+                      <input
+                        type="email"
+                        className="bg-gray-700 p-1 rounded w-full"
+                        value={editableUserEmail}
+                        onChange={(e) => setEditableUserEmail(e.target.value)}
+                      />
+                    ) : (
+                      user.email
+                    )}
+                  </td>
+
+
+                  <td className="py-3 px-4">
+                    {user.isAdmin ? (
+                      <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
+                        <FaUserShield className="inline" /> Admin
+                      </span>
+                    ) : (
+                      <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+                        User
+                      </span>
+                    )}
+                  </td>
+
+
+                  <td className="py-3 px-4 text-center">
+                    {editMode === user._id ? (
+                      <div className="flex justify-center gap-3">
+                        <button
+                          onClick={() => updateHandler(user._id)}
+                          className="text-green-400 hover:text-green-300"
+                        >
+                          <FaCheck />
+                        </button>
+                        <button
+                          onClick={() => setEditMode(null)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center gap-3">
+                        <button
+                          onClick={() => toggleEdit(user)}
+                          className="text-yellow-400 hover:text-yellow-300"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => deleteHandler(user._id)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="text-sm text-gray-400">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
 
-export default Userlist;
+export default AdminUserList;

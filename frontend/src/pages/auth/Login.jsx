@@ -17,10 +17,13 @@ const Login = () => {
   const redirect = sp.get("redirect") || "/";
 
   const [login, { isLoading }] = useLoginMutation();
-
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect);
+      if (userInfo.isAdmin === true) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate(redirect);
+      }
     }
   }, [navigate, redirect, userInfo]);
 

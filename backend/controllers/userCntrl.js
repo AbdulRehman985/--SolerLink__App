@@ -89,9 +89,58 @@ export const logOutCurrentUser = asyncHandler(async (req, res) => {
 });
 
 export const getAllUser = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  try {
+    const { page = 1, pageSize = 10, sort = null, search = "" } = req.query;
 
-  res.json(users);
+    const skip = (Number(page) - 1) * Number(pageSize);
+
+    const generateSort = () => {
+      try {
+        const sortParsed = JSON.parse(sort);
+        return sortParsed?.field
+          ? { [sortParsed.field]: sortParsed.sort === "asc" ? 1 : -1 }
+          : {};
+      } catch {
+        return {};
+      }
+    };
+
+    const sortFormatted = sort ? generateSort() : {};
+
+    const isNumeric = !isNaN(Number(search));
+    let searchFilter = {};
+
+    if (search && !isNumeric) {
+      searchFilter = {
+        $or: [
+          { email: { $regex: search, $options: "i" } },
+          { username: { $regex: search, $options: "i" } },
+        ],
+      };
+    }
+
+    const users = await User.find(searchFilter)
+      .sort(sortFormatted)
+      .skip(skip)
+      .limit(Number(pageSize));
+
+    const total = await User.countDocuments(searchFilter);
+
+    res.status(200).json({
+      success: true,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / pageSize),
+      users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+      error: error.message,
+    });
+  }
 });
 
 export const getCurrentUserProfile = asyncHandler(async (req, res) => {
