@@ -83,7 +83,7 @@ const AdminDashboard = () => {
                             <div>
                                 <p className="text-gray-400">Customers</p>
                                 <h2 className="text-2xl font-bold text-amber-400">
-                                    {customers ? customers.length : <Loader />}
+                                    {customers ? customers?.users.length : <Loader />}
                                 </h2>
                             </div>
                         </div>

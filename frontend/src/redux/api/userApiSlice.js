@@ -35,14 +35,25 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUsers: builder.query({
-      query: ({ page, pageSize, sort, search }) => ({
-        url: `${USERS_URL}`,
-        credentials: "include",
-        params: { page, pageSize, sort, search },
-      }),
+      query: (args) => {
+        if (!args) {
+          return {
+            url: `${USERS_URL}`,
+            credentials: "include",
+          };
+        }
+
+        const { page, pageSize, sort, search } = args;
+        return {
+          url: `${USERS_URL}`,
+          credentials: "include",
+          params: { page, pageSize, sort, search },
+        };
+      },
       providesTags: ["User"],
       keepUnusedDataFor: 5,
     }),
+
     deleteUser: builder.mutation({
       query: (userId) => ({
         url: `${USERS_URL}/${userId}`,

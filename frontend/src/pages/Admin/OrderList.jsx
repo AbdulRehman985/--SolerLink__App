@@ -8,7 +8,8 @@ import AdminMenu from "./AdminMenu";
 const OrderList = () => {
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
-    const [sort] = useState({});
+    const [sort, setSort] = useState({ field: "createdAt", sort: "desc" });
+
     const [search, setSearch] = useState("");
 
     const { data, isLoading, error } = useGetOrdersQuery({
@@ -25,6 +26,14 @@ const OrderList = () => {
     const handleSearch = (e) => {
         setSearch(e.target.value);
         setPage(1);
+    };
+    const handleSort = (field) => {
+        setSort((prev) => {
+            if (prev.field === field) {
+                return { field, sort: prev.sort === "asc" ? "desc" : "asc" };
+            }
+            return { field, sort: "asc" };
+        });
     };
 
     if (isLoading) return <Loader />;
@@ -44,7 +53,7 @@ const OrderList = () => {
                     All Orders
                 </h2>
 
-                {/* 🔍 Search Bar */}
+
                 <div className="relative w-full sm:w-72">
                     <input
                         type="text"
@@ -77,13 +86,39 @@ const OrderList = () => {
                             <th className="py-3 px-4">Items</th>
                             <th className="py-3 px-4">Id</th>
                             <th className="py-3 px-4">User</th>
-                            <th className="py-3 px-4">Date</th>
-                            <th className="py-3 px-4">Total</th>
+
+
+                            <th
+                                className="py-3 px-4 cursor-pointer select-none"
+                                onClick={() => handleSort("createdAt")}
+                            >
+                                Date
+                                {sort.field === "createdAt" && (
+                                    <span className="ml-1 text-gray-300 ">
+                                        {sort.sort === "asc" ? "▲" : "▼"}
+                                    </span>
+                                )}
+                            </th>
+
+                            {/* 🔽 Sortable Total Column */}
+                            <th
+                                className="py-3 px-4 cursor-pointer select-none"
+                                onClick={() => handleSort("totalPrice")}
+                            >
+                                Total
+                                {sort.field === "totalPrice" && (
+                                    <span className="ml-1 text-pink-400">
+                                        {sort.sort === "asc" ? "▲" : "▼"}
+                                    </span>
+                                )}
+                            </th>
+
                             <th className="py-3 px-4">Paid</th>
                             <th className="py-3 px-4">Delivered</th>
                             <th className="py-3 px-4 text-center">Action</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {orders.length === 0 ? (
                             <tr>
@@ -174,7 +209,7 @@ const OrderList = () => {
                     Next
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 

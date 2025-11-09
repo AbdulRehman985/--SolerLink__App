@@ -71,67 +71,63 @@ export const createOrder = expressAsyncHandler(async (req, res) => {
 });
 export const getAllOrders = expressAsyncHandler(async (req, res) => {
   try {
-    const { page = 1, pageSize = 10, sort = null, search = "" } = req.query;
-
+    const { page = 1, pageSize = 10, sort, search = "" } = req.query;
     const skip = (Number(page) - 1) * Number(pageSize);
 
-    // Handle sorting
-    const generateSort = () => {
+    // Sorting
+    const sortFormatted = (() => {
       try {
-        const sortParsed = JSON.parse(sort);
-        return sortParsed?.field
-          ? { [sortParsed.field]: sortParsed.sort === "asc" ? 1 : -1 }
-          : {};
+        const parsed = JSON.parse(sort);
+        return parsed?.field
+          ? { [parsed.field]: parsed.sort === "asc" ? 1 : -1 }
+          : { createdAt: -1 };
       } catch {
-        return {};
+        return { createdAt: -1 };
       }
-    };
-    const sortFormated = sort ? generateSort() : {};
+    })();
 
-    const isNumeric = !isNaN(Number(search));
+    // Search filter
     let searchFilter = {};
-
     if (search) {
-      if (isNumeric) {
-        // Search by totalPrice
-        searchFilter = { totalPrice: Number(search) };
+      if (!isNaN(Number(search))) {
+        searchFilter.totalPrice = Number(search);
       } else {
-        // Find matching users first
-        const matchedUsers = await User.find({
+        const users = await User.find({
           username: { $regex: search, $options: "i" },
         }).select("_id");
 
-        // Extract their IDs
-        const userIds = matchedUsers.map((u) => u._id);
+        const userIds = users.map((u) => u._id);
 
-        // Build combined search filter
         searchFilter = {
           $or: [
-            { user: { $in: userIds } }, // match by user
+            { user: { $in: userIds } },
             { paymentMethod: { $regex: search, $options: "i" } },
           ],
         };
       }
     }
 
-    // Query orders
-    const orders = await Order.find(searchFilter)
-      .populate("user", "username email")
-      .sort(sortFormated)
-      .skip(skip)
-      .limit(Number(pageSize));
-
-    const total = await Order.countDocuments(searchFilter);
+    // Parallel queries
+    const [orders, total] = await Promise.all([
+      Order.find(searchFilter)
+        .populate("user", "username email")
+        .sort(sortFormatted)
+        .skip(skip)
+        .limit(Number(pageSize))
+        .lean(),
+      Order.countDocuments(searchFilter),
+    ]);
 
     res.status(200).json({
+      success: true,
       orders,
       total,
       page: Number(page),
       pages: Math.ceil(total / pageSize),
     });
   } catch (error) {
-    console.error("Error fetching orders:", error.message);
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 
