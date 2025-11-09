@@ -10,24 +10,29 @@ import {
   updateById,
   updateCurrentUser,
 } from "../controllers/userCntrl.js";
-import {
-  authitacted,
-  authorizedIsAdmin,
-} from "../middleware/authMiddleware.js";
+import { authitacted, authorizeRoles } from "../middleware/authMiddleware.js";
 const userRouter = express.Router();
 userRouter
   .route("/")
   .post(registerUser)
-  .get(authitacted, authorizedIsAdmin, getAllUser);
+  .get(authitacted, authorizeRoles("admin"), getAllUser);
 userRouter.post("/auth", logInUser);
 userRouter.post("/logout", logOutCurrentUser);
 userRouter
   .route("/profile")
-  .get(authitacted, getCurrentUserProfile)
-  .put(authitacted, updateCurrentUser);
+  .get(
+    authitacted,
+    authorizeRoles("user", "shopkeeper", "admin"),
+    getCurrentUserProfile
+  )
+  .put(
+    authitacted,
+    authorizeRoles("user", "shopkeeper", "admin"),
+    updateCurrentUser
+  );
 userRouter
   .route("/:id")
-  .delete(authitacted, authorizedIsAdmin, destroyUser)
-  .get(authitacted, authorizedIsAdmin, getUserById)
-  .put(authitacted, authorizedIsAdmin, updateById);
+  .delete(authitacted, authorizeRoles("admin"), destroyUser)
+  .get(authitacted, authorizeRoles("admin"), getUserById)
+  .put(authitacted, authorizeRoles("admin"), updateById);
 export default userRouter;

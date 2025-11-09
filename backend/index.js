@@ -11,6 +11,7 @@ import productRouter from "./routes/ProductRouter.js";
 import UploadRouter from "./routes/FileUploadRouter.js";
 import { OrderRouter } from "./routes/OrderRouter.js";
 import Order from "./models/OrderModel.js";
+import { User } from "./models/userModel.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;

@@ -1,8 +1,5 @@
 import express, { Router } from "express";
-import {
-  authitacted,
-  authorizedIsAdmin,
-} from "../middleware/authMiddleware.js";
+import { authitacted, authorizeRoles } from "../middleware/authMiddleware.js";
 import formidable from "express-formidable";
 import {
   addProduct,
@@ -18,7 +15,6 @@ import {
 } from "../controllers/ProductController.js";
 import checkId from "../middleware/CheckId.js";
 import { uploadToCloudinary } from "../middleware/uploadToCloudinary.js";
-import upload from "../middleware/multer.js";
 const productRouter = express.Router();
 
 productRouter
@@ -27,20 +23,25 @@ productRouter
   .post(
     uploadToCloudinary,
     authitacted,
-    authorizedIsAdmin,
+    authorizeRoles("admin"),
     formidable(),
     addProduct
   );
 productRouter.route("/allproducts").get(fetchallProduct);
 productRouter
   .route("/:id/reviews")
-  .post(authitacted, checkId, addProductReviews);
+  .post(
+    authitacted,
+    authorizeRoles("user", "shopkeeper", "admin"),
+    checkId,
+    addProductReviews
+  );
 productRouter.get("/top", fetchTopProduct);
 productRouter.get("/new", fetchNewProduct);
 productRouter
   .route("/:id")
   .get(fetchProductById)
-  .put(authitacted, authorizedIsAdmin, formidable(), updateProductDetails)
-  .delete(authitacted, authorizedIsAdmin, formidable(), destroyProduct);
+  .put(authitacted, authorizeRoles("admin"), formidable(), updateProductDetails)
+  .delete(authitacted, authorizeRoles("admin"), formidable(), destroyProduct);
 productRouter.route("/filterd-product").post(filterdProduct);
 export default productRouter;

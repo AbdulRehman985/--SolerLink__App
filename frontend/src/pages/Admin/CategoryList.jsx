@@ -29,6 +29,7 @@ const CategoryList = () => {
       setName("");
     } catch (error) {
       toast.error(error?.data?.error || "Failed to save category");
+      console.log(error)
     }
   };
 
