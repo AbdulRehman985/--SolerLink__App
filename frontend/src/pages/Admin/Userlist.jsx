@@ -5,6 +5,7 @@ import {
   FaCheck,
   FaTimes,
   FaUserShield,
+  FaStore,
 } from "react-icons/fa";
 import {
   useDeleteUserMutation,
@@ -184,20 +185,21 @@ const AdminUserList = () => {
                       user.email
                     )}
                   </td>
-
-
                   <td className="py-3 px-4">
-                    {user.isAdmin ? (
+                    {user.role === "admin" ? (
                       <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
                         <FaUserShield className="inline" /> Admin
                       </span>
+                    ) : user.role === "shopkeeper" ? (
+                      <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
+                        <FaStore className="inline" /> Shopkeeper
+                      </span>
                     ) : (
-                      <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+                      <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
                         User
                       </span>
                     )}
                   </td>
-
 
                   <td className="py-3 px-4 text-center">
                     {editMode === user._id ? (

@@ -19,6 +19,7 @@ export const CategoryAPISlice = apiSlice.injectEndpoints({
         credentials: "include",
         body: updateCategory,
       }),
+      invalidatesTags: ["Category"],
     }),
     deleteCategory: builder.mutation({
       query: ({ categoryID }) => ({
@@ -26,7 +27,9 @@ export const CategoryAPISlice = apiSlice.injectEndpoints({
         credentials: "include",
         method: "DELETE",
       }),
+      invalidatesTags: ["Category"],
     }),
+
     fetchCategories: builder.query({
       query: () => ({
         url: `${Category_URL}/categories`,

@@ -37,8 +37,8 @@ export const registerUser = asyncHandler(async (req, res) => {
   res.status(201).json({
     _id: newUser._id,
     username: newUser.username,
-    isAdmin: newUser.isAdmin,
     email: newUser.email,
+    role: newUser.role,
   });
 });
 
@@ -73,7 +73,7 @@ export const logInUser = asyncHandler(async (req, res) => {
     _id: existingUser._id,
     username: existingUser.username,
     email: existingUser.email,
-    isAdmin: existingUser.isAdmin,
+    role: existingUser.role,
   });
 });
 
@@ -192,7 +192,6 @@ export const destroyUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
-import mongoose from "mongoose";
 
 export const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;

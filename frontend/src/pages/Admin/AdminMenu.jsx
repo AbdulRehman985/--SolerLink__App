@@ -19,7 +19,7 @@ const AdminMenu = () => {
 
   return (
     <>
-      {userInfo?.isAdmin && (
+      {userInfo?.role === "admin" && (
         <div>
           {" "}
           {/* Toggle Button */}

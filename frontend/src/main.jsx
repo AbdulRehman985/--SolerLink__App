@@ -54,6 +54,7 @@ const router = createBrowserRouter(
         <Route path="product/update/:_id" element={<Updateproduct />} />
         <Route path="dashboard" element={<Dashboard />} />
       </Route>
+      <Route path="*" element={<h1>Page not found</h1>} />
     </Route>
   )
 );

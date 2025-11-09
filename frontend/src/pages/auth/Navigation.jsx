@@ -112,7 +112,7 @@ const Navigation = () => {
 
             {dropDownOpen && (
               <ul className="absolute bottom-full mb-2 left-0 w-48 bg-white text-gray-700 rounded shadow-md z-[999]">
-                {userInfo.isAdmin && (
+                {userInfo.role === "admin" && (
                   <>
                     <li>
                       <Link
