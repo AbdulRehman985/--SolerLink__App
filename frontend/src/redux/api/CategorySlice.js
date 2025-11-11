@@ -29,7 +29,6 @@ export const CategoryAPISlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Category"],
     }),
-
     fetchCategories: builder.query({
       query: () => ({
         url: `${Category_URL}/categories`,
