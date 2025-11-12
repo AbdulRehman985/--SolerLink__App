@@ -2,7 +2,7 @@ import CategoryModel from "../models/CategoryModel.js";
 import asyncHandler from "express-async-handler";
 export const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, isSerialTracked = false } = req.body; // default false
 
     if (!name) {
       return res.status(400).json({ error: "Name is required" });
@@ -13,8 +13,8 @@ export const createCategory = async (req, res) => {
       return res.status(409).json({ error: "Category already exists" });
     }
 
-    const category = await new CategoryModel({ name }).save();
-    return res.status(201).json(category); // 201 = created
+    const category = await new CategoryModel({ name, isSerialTracked }).save();
+    return res.status(201).json(category);
   } catch (error) {
     console.error("Create Category Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -23,13 +23,14 @@ export const createCategory = async (req, res) => {
 
 export const UpdateCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, isSerialTracked = false } = req.body;
     const { categoryID } = req.params;
     const category = await CategoryModel.findOne({ _id: categoryID });
     if (!category) {
       return res.status(404).json({ error: "Category Not Found" });
     }
     category.name = name;
+    category.isSerialTracked = isSerialTracked;
     const UpdateCategory = await category.save();
     res.json(UpdateCategory);
   } catch (error) {

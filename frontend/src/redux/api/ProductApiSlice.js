@@ -81,9 +81,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, productId) => [
-        { type: "Product", id: productId },
-      ],
+      invalidatesTags: ["Product"],
     }),
     filterdProduct: builder.query({
       query: ({ checked, radio }) => ({

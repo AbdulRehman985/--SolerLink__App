@@ -6,6 +6,8 @@ const CategoryForm = ({
   handleSubmit,
   buttonText = "Submit",
   handleDeleted,
+  isSerialTracked,
+  setIsSerialTracked,
 }) => {
   return (
     <div className="p-3">
@@ -16,8 +18,22 @@ const CategoryForm = ({
           placeholder="Write Category Name"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="py-3 px-4 border rounded-lg w-full"
+          className="py-3 px-4 border rounded-lg w-full bg-gray-900 text-white"
         />
+        {/* Serial Tracking Checkbox */}
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="serialTracking"
+            checked={isSerialTracked}
+            onChange={(e) => setIsSerialTracked(e.target.checked)}
+            className="w-4 h-4 text-pink-500 border-gray-300 rounded focus:ring-pink-500"
+          />
+          <label htmlFor="serialTracking" className="text-sm text-gray-300">
+            Enable Serial Tracking (for panels)
+          </label>
+        </div>
+
         <div className="flex justify-between">
           <button
             type="submit"

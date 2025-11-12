@@ -1,11 +1,21 @@
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import { Product } from "../models/ProductModel.js";
+import { SerialNumber } from "../models/SerialNumberModel.js";
+import Category from "../models/CategoryModel.js";
 
 export const addProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, category, quantity, brand, image } =
-      req.fields;
+    const {
+      name,
+      description,
+      price,
+      category,
+      quantity,
+      brand,
+      image,
+      serialNumbers,
+    } = req.fields;
 
     if (!name) return res.status(400).json({ error: "Name is required" });
     if (!description)
@@ -13,16 +23,54 @@ export const addProduct = asyncHandler(async (req, res) => {
     if (!price) return res.status(400).json({ error: "Price is required" });
     if (!category)
       return res.status(400).json({ error: "Category is required" });
-    if (!mongoose.Types.ObjectId.isValid(category)) {
+    if (!mongoose.Types.ObjectId.isValid(category))
       return res.status(400).json({ error: "Invalid category ID" });
-    }
     if (!quantity)
       return res.status(400).json({ error: "Quantity is required" });
     if (!brand) return res.status(400).json({ error: "Brand is required" });
     if (!image) return res.status(400).json({ error: "Image is required" });
 
+    // Check if category requires serial numbers
+    const categoryData = await Category.findById(category);
+    let serialsArray = [];
+
+    if (categoryData?.isSerialTracked) {
+      if (!serialNumbers)
+        return res.status(400).json({
+          error: `Serial numbers are required for category ${categoryData.name}`,
+        });
+
+      if (typeof serialNumbers === "string") {
+        serialsArray = serialNumbers
+          .split(",")
+          .map((sn) => sn.trim())
+          .filter((sn) => sn !== "");
+      } else if (Array.isArray(serialNumbers)) {
+        serialsArray = serialNumbers.map((sn) => sn.trim());
+      }
+
+      if (serialsArray.length !== Number(quantity)) {
+        return res.status(400).json({
+          error: `Please provide exactly ${quantity} serial numbers.`,
+        });
+      }
+    }
+
+    // Create product
     const newProduct = new Product({ ...req.fields });
     await newProduct.save();
+
+    // Insert serial numbers
+    if (categoryData?.isSerialTracked && serialsArray.length > 0) {
+      const serialDocs = serialsArray.map((sn) => ({
+        serialNumber: sn,
+        product: newProduct._id,
+        status: "available",
+      }));
+
+      await SerialNumber.insertMany(serialDocs);
+    }
+
     res.status(201).json(newProduct);
   } catch (error) {
     console.error(error);
@@ -32,8 +80,16 @@ export const addProduct = asyncHandler(async (req, res) => {
 
 export const updateProductDetails = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, category, quantity, brand, image } =
-      req.fields;
+    const {
+      name,
+      description,
+      price,
+      category,
+      quantity,
+      brand,
+      image,
+      serialNumbers,
+    } = req.fields;
 
     if (!name) return res.status(400).json({ error: "Name is required" });
     if (!description)
@@ -41,27 +97,56 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
     if (!price) return res.status(400).json({ error: "Price is required" });
     if (!category)
       return res.status(400).json({ error: "Category is required" });
-    if (!mongoose.Types.ObjectId.isValid(category)) {
+    if (!mongoose.Types.ObjectId.isValid(category))
       return res.status(400).json({ error: "Invalid category ID" });
-    }
     if (!quantity)
       return res.status(400).json({ error: "Quantity is required" });
     if (!brand) return res.status(400).json({ error: "Brand is required" });
     if (!image) return res.status(400).json({ error: "Image is required" });
-    const updateProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.fields,
-      },
-      { new: true }
-    );
-    await updateProduct.save();
-    res.json(updateProduct);
+
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+
+    // Update basic fields
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    product.category = category;
+    product.quantity = quantity;
+    product.brand = brand;
+    product.image = image;
+
+    await product.save();
+
+    // Handle serial numbers if the category is serial tracked
+    const categoryData = await Category.findById(category);
+    if (categoryData?.isSerialTracked && serialNumbers) {
+      if (!Array.isArray(serialNumbers) || serialNumbers.length !== quantity) {
+        return res.status(400).json({
+          error: `Please provide exactly ${quantity} serial numbers as an array.`,
+        });
+      }
+
+      // Remove old serial numbers for this product
+      await SerialNumber.deleteMany({ product: product._id });
+
+      // Insert new serial numbers
+      const serialDocs = serialNumbers.map((sn) => ({
+        serialNumber: sn,
+        product: product._id,
+        status: "available",
+      }));
+
+      await SerialNumber.insertMany(serialDocs);
+    }
+
+    res.status(200).json(product);
   } catch (error) {
-    console.log(error);
-    res.status(400).json(error.message);
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 });
+
 export const destroyProduct = asyncHandler(async (req, res) => {
   try {
     const delproduct = await Product.findByIdAndDelete(req.params.id);

@@ -7,9 +7,11 @@ import {
 import { useFetchCategoriesQuery } from "../../redux/api/CategorySlice.js";
 import { toast } from "react-toastify";
 import AdminMenu from "./AdminMenu.jsx";
+import Loader from "../../components/Loader.jsx";
 
-const Productlist = () => {
+const ProductList = () => {
   const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -17,12 +19,47 @@ const Productlist = () => {
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
   const [stock, setStock] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
-  const navigate = useNavigate();
+  const [serialNumbers, setSerialNumbers] = useState([""]);
 
-  const [uploadProductImage] = useUploadProductImageMutation();
-  const [createProduct, { isLoading }] = useCreateProductMutation();
+  const navigate = useNavigate();
   const { data: categories } = useFetchCategoriesQuery();
+  const [uploadProductImage, { isLoading: imageLoader }] = useUploadProductImageMutation();
+  const [createProduct, { isLoading }] = useCreateProductMutation();
+
+  const selectedCategoryObj = categories?.find((c) => c._id === category);
+  const showSerialSection = selectedCategoryObj?.isSerialTracked || false;
+
+  // Handle serial input changes
+  const handleSerialChange = (index, value) => {
+    const updated = [...serialNumbers];
+    updated[index] = value;
+    setSerialNumbers(updated);
+  };
+
+  const addSerialInput = () => setSerialNumbers([...serialNumbers, ""]);
+  const removeSerialInput = (index) =>
+    setSerialNumbers(serialNumbers.filter((_, i) => i !== index));
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.imageUrl);
+      setImageUrl(res.imageUrl);
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  };
+
+  const getSerialNumbersArray = () => {
+    if (!showSerialSection) return [];
+    return serialNumbers
+      .flatMap((sn) => sn.split(",")) // split comma-separated inputs
+      .map((sn) => sn.trim())
+      .filter((sn) => sn !== "");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,27 +74,27 @@ const Productlist = () => {
       productData.append("brand", brand);
       productData.append("countInStock", stock);
 
+      if (showSerialSection) {
+        const serialArray = getSerialNumbersArray();
+        console.log("🚀 ~ handleSubmit ~ serialArray:", serialArray)
+
+        if (serialArray.length !== Number(quantity)) {
+          return toast.error(
+            `Please provide exactly ${quantity} serial numbers.`
+          );
+        }
+        productData.append("serialNumbers", serialArray.join(",")); // send as single string
+      }
+
       const { data } = await createProduct(productData);
-      if (data.error) toast.error("Product creation failed. Try again.");
+      if (data.error) toast.error(data.error || "Product creation failed.");
       else {
         toast.success(`${data.name} created successfully`);
         navigate("/");
       }
     } catch (error) {
+      console.log(error);
       toast.error("Product creation failed.");
-    }
-  };
-
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.imageUrl);
-      setImageUrl(res.imageUrl);
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -78,10 +115,9 @@ const Productlist = () => {
           />
         </div>
       )}
-
-      <label className="block w-full cursor-pointer mb-4 text-center border border-dashed border-yellow-500/40 py-4 rounded-xl hover:border-yellow-400 transition-all duration-300">
+      {imageLoader ? <Loader /> : <label className="block w-full cursor-pointer mb-4 text-center border border-dashed border-yellow-500/40 py-4 rounded-xl hover:border-yellow-400 transition-all duration-300">
         <span className="text-gray-300 text-sm">
-          {image ? image.name : "📸 Click to Upload Product Image"}
+          {image ? image.name : " Click to Upload Product Image"}
         </span>
         <input
           type="file"
@@ -89,13 +125,15 @@ const Productlist = () => {
           onChange={uploadFileHandler}
           className="hidden"
         />
-      </label>
+      </label>}
+
+
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
             { label: "Product Name", value: name, setValue: setName },
-            { label: "Price ($)", value: price, setValue: setPrice, type: "number" },
+            { label: "Price (PKR)", value: price, setValue: setPrice, type: "number" },
             { label: "Quantity", value: quantity, setValue: setQuantity, type: "number" },
             { label: "Brand", value: brand, setValue: setBrand },
             { label: "Stock Count", value: stock, setValue: setStock, type: "number" },
@@ -107,7 +145,7 @@ const Productlist = () => {
                 value={field.value}
                 onChange={(e) => field.setValue(e.target.value)}
                 required
-                className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition outline-none text-sm"
+                className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
               />
             </div>
           ))}
@@ -117,7 +155,7 @@ const Productlist = () => {
             <select
               onChange={(e) => setCategory(e.target.value)}
               required
-              className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition outline-none text-sm"
+              className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
             >
               <option value="">Choose Category</option>
               {categories?.map((c) => (
@@ -139,6 +177,42 @@ const Productlist = () => {
           ></textarea>
         </div>
 
+        {showSerialSection && (
+          <div className="bg-gray-800 p-4 rounded-lg mb-4">
+            <label className="block mb-2 text-xs text-gray-400 font-semibold">
+              Serial Numbers (for {selectedCategoryObj?.name})
+            </label>
+            {serialNumbers.map((sn, index) => (
+              <div key={index} className="flex items-center mb-2 gap-2">
+                <input
+                  type="text"
+                  placeholder={`Serial Number ${index + 1}`}
+                  value={sn}
+                  onChange={(e) => handleSerialChange(index, e.target.value)}
+                  className="flex-1 p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSerialInput(index)}
+                  className="px-3 py-1 bg-red-500 rounded-lg text-white hover:bg-red-600 text-sm"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addSerialInput}
+              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm"
+            >
+              + Add Serial Number
+            </button>
+            <p className="text-gray-400 text-xs mt-1">
+              Add multiple serial numbers manually or paste comma-separated values.
+            </p>
+          </div>
+        )}
+
         <div className="flex justify-end pt-2">
           <button
             type="submit"
@@ -153,4 +227,4 @@ const Productlist = () => {
   );
 };
 
-export default Productlist;
+export default ProductList;

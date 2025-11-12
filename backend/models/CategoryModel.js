@@ -1,12 +1,6 @@
 import mongoose from "mongoose";
-
-const categoryScheme = mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: true,
-    unique: true,
-    maxLength: 32,
-  },
+const categorySchema = mongoose.Schema({
+  name: { type: String, required: true, unique: true, trim: true },
+  isSerialTracked: { type: Boolean, default: false },
 });
-export default mongoose.model("Category", categoryScheme);
+export default mongoose.model("Category", categorySchema);
