@@ -29,7 +29,7 @@ const SmallProduct = ({ product }) => {
 
       {/* Product Info */}
       <div className="mt-4">
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.slug}`}>
           <h2 className="text-white font-semibold text-base truncate hover:text-yellow-400 transition">
             {product.name}
           </h2>

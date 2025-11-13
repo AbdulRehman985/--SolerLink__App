@@ -26,7 +26,7 @@ const ProductCard = ({ p }) => {
       </div>
 
       {/* Product Image */}
-      <Link to={`/product/${p._id}`}>
+      <Link to={`/product/${p.slug}`}>
         <div className="overflow-hidden rounded-t-xl">
           <img
             src={p.image}
@@ -47,7 +47,7 @@ const ProductCard = ({ p }) => {
           {p.brand}
         </span>
 
-        <Link to={`/product/${p._id}`}>
+        <Link to={`/product/${p.slug}`}>
           <h3 className="text-white text-lg font-semibold truncate group-hover:text-yellow-400 transition">
             {p.name}
           </h3>

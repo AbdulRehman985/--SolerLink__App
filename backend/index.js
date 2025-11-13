@@ -39,7 +39,6 @@ async function updateSlugs() {
       // Create slug from product name
       const slug = slugify(product.name, { lower: true, strict: true });
       product.slug = slug;
-
       await product.save();
       console.log(`Updated slug for: ${product.name} → ${slug}`);
     }

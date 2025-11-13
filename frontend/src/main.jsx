@@ -37,7 +37,7 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/favourite" element={<FavoritesProduct />} />
-      <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/product/:slug" element={<ProductDetails />} />
       <Route path="/user-orders" element={<UserOrder />} />
       <Route element={<PrivateRoute />}>
         <Route path="profile" element={<Profile />} />
@@ -51,7 +51,7 @@ const router = createBrowserRouter(
         <Route path="productlist" element={<Productlist />} />
         <Route path="allproduct" element={<AllProduct />} />
         <Route path="orderlist" element={<OrderList />} />
-        <Route path="product/update/:_id" element={<Updateproduct />} />
+        <Route path="product/update/:slug" element={<Updateproduct />} />
         <Route path="dashboard" element={<Dashboard />} />
       </Route>
       <Route path="*" element={<h1>Page not found</h1>} />

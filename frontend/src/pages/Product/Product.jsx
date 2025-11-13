@@ -26,7 +26,7 @@ const Product = ({ product }) => {
 
       {/* Product Info */}
       <div className="p-4">
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.slug}`}>
           <h2
             className="text-lg font-semibold text-gray-200 leading-snug 
                        hover:text-pink-400 transition-all duration-300 line-clamp-2"
@@ -48,7 +48,7 @@ const Product = ({ product }) => {
           </span>
 
           <Link
-            to={`/product/${product._id}`}
+            to={`/product/${product.slug}`}
             className="text-sm font-medium text-pink-400 hover:text-pink-300 transition"
           >
             View Details →

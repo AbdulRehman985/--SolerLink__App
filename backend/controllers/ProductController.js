@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { Product } from "../models/ProductModel.js";
 import { SerialNumber } from "../models/SerialNumberModel.js";
 import Category from "../models/CategoryModel.js";
-
+import slugify from "slugify";
 export const addProduct = asyncHandler(async (req, res) => {
   try {
     const {
@@ -55,9 +55,19 @@ export const addProduct = asyncHandler(async (req, res) => {
         });
       }
     }
+    // Generate unique slug
+    const baseSlug = slugify(name, { lower: true, strict: true });
+    let slug = baseSlug;
+    let existingProduct = await Product.findOne({ slug });
+
+    let count = 1;
+    while (existingProduct) {
+      slug = `${baseSlug}-${count++}`;
+      existingProduct = await Product.findOne({ slug });
+    }
 
     // Create product
-    const newProduct = new Product({ ...req.fields });
+    const newProduct = new Product({ ...req.fields, slug });
     await newProduct.save();
 
     // Insert serial numbers
@@ -77,7 +87,6 @@ export const addProduct = asyncHandler(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 export const updateProductDetails = asyncHandler(async (req, res) => {
   try {
     const {
@@ -91,7 +100,10 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       serialNumbers,
     } = req.fields;
 
-    // ✅ Validate inputs
+    const { slug } = req.params;
+    console.log("🚀 ~ slug :", slug);
+
+    // ✅ Validate fields
     if (!name) return res.status(400).json({ error: "Name is required" });
     if (!description)
       return res.status(400).json({ error: "Description is required" });
@@ -104,21 +116,40 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       return res.status(400).json({ error: "Quantity is required" });
     if (!brand) return res.status(400).json({ error: "Brand is required" });
     if (!image) return res.status(400).json({ error: "Image is required" });
-    // ✅ Find existing product
-    const product = await Product.findById(req.params.id);
+
+    //  Find product
+    const product = await Product.findOne({ slug });
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    // ✅ Update basic product fields
-    product.name = name;
+    //  Update slug if name changed
+    if (name && name !== product.name) {
+      const baseSlug = slugify(name, { lower: true, strict: true });
+      let slug = baseSlug;
+      let existingProduct = await Product.findOne({
+        slug,
+        _id: { $ne: id },
+      });
+      let count = 1;
+      while (existingProduct) {
+        slug = `${baseSlug}-${count++}`;
+        existingProduct = await Product.findOne({
+          slug,
+          _id: { $ne: id },
+        });
+      }
+      product.slug = slug;
+      product.name = name;
+    }
+
+    // Update other fields
     product.description = description;
     product.price = price;
     product.category = category;
     product.quantity = quantity;
     product.brand = brand;
     product.image = image;
-    await product.save();
 
-    // ✅ Handle serial numbers
+    //  Handle serial numbers
     const categoryData = await Category.findById(category);
     let serialsArray = [];
 
@@ -129,7 +160,7 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
         });
       }
 
-      // Convert serialNumbers into clean array
+      // Clean serial numbers array
       if (typeof serialNumbers === "string") {
         serialsArray = serialNumbers
           .split(",")
@@ -145,21 +176,21 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
         });
       }
 
-      // ✅ Remove old serials
       await SerialNumber.deleteMany({ product: product._id });
 
-      // ✅ Insert new serial numbers (avoid duplicates)
       const serialDocs = serialsArray.map((sn) => ({
         serialNumber: sn,
-        product: product._id, // 🔥 FIXED (was Product._id)
+        product: product._id,
         status: "available",
       }));
 
       await SerialNumber.insertMany(serialDocs);
     } else {
-      // If category is not serial tracked, remove any old serials
+      // If category not serial tracked clear old serials
       await SerialNumber.deleteMany({ product: product._id });
     }
+
+    await product.save();
 
     res.status(200).json({
       success: true,
@@ -167,7 +198,7 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       product,
     });
   } catch (error) {
-    console.error("❌ Update product error:", error);
+    console.error(" Update product error:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -203,7 +234,8 @@ export const fetchProduct = asyncHandler(async (req, res) => {
 
 export const fetchProductById = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ slug: req.params.id });
+    console.log("🚀 ~ req.params.slug:", req.params.id);
     if (product) {
       res.json(product);
     } else {

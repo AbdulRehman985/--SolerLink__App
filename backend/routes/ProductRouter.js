@@ -39,9 +39,16 @@ productRouter
 productRouter.get("/top", fetchTopProduct);
 productRouter.get("/new", fetchNewProduct);
 productRouter
+  .route("/:slug")
+  .put(
+    authitacted,
+    authorizeRoles("admin"),
+    formidable(),
+    updateProductDetails
+  );
+productRouter
   .route("/:id")
   .get(fetchProductById)
-  .put(authitacted, authorizeRoles("admin"), formidable(), updateProductDetails)
   .delete(authitacted, authorizeRoles("admin"), formidable(), destroyProduct);
 productRouter.route("/filterd-product").post(filterdProduct);
 export default productRouter;

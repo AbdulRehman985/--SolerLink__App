@@ -12,9 +12,10 @@ import AdminMenu from "./AdminMenu.jsx";
 import Loader from "../../components/Loader.jsx";
 
 const UpdateProduct = () => {
-  const { _id } = useParams();
+  const { slug } = useParams();
+  console.log("🚀 ~ UpdateProduct ~  slug:", slug)
   const navigate = useNavigate();
-  const { data: productData, isLoading: productLoading } = useGetProductByIdQuery(_id);
+  const { data: productData, isLoading: productLoading } = useGetProductByIdQuery(slug);
   const { data: categories } = useFetchCategoriesQuery();
 
   const [uploadProductImage, { isLoading: imageLoader }] = useUploadProductImageMutation();
@@ -105,7 +106,7 @@ const UpdateProduct = () => {
         formData.append("serialNumbers", serialArray.join(","));
       }
 
-      const { data } = await updateProduct({ productId: _id, formData });
+      const { data } = await updateProduct({ productId: slug, formData });
       console.log(data)
       if (data?.error) toast.error(data.error || "Product update failed.");
       else {
@@ -122,7 +123,7 @@ const UpdateProduct = () => {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      const { data } = await deleteProduct(_id);
+      const { data } = await deleteProduct(productData._id);
       toast.success(`${data.name} deleted successfully`);
       navigate("/admin/allproduct");
     } catch (error) {

@@ -39,7 +39,7 @@ const AllProduct = () => {
                   className="bg-[#1e1e1e] rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
                 >
                   <Link
-                    to={`/admin/product/update/${product?._id}`}
+                    to={`/admin/product/update/${product?.slug}`}
                     className="flex p-4 gap-4"
                   >
                     <img
@@ -68,7 +68,7 @@ const AllProduct = () => {
                         </span>
 
                         <Link
-                          to={`/admin/product/update/${product._id}`}
+                          to={`/admin/product/update/${product?.slug}`}
                           className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-pink-700 rounded hover:bg-pink-800"
                         >
                           Update
