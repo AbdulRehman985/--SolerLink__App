@@ -1,50 +1,91 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  useDeleteProductMutation,
   useGetProductByIdQuery,
   useUpdateProductMutation,
+  useDeleteProductMutation,
   useUploadProductImageMutation,
-} from "../../redux/api/ProductApiSlice";
-import { useFetchCategoriesQuery } from "../../redux/api/CategorySlice";
-import AdminMenu from "./AdminMenu";
+} from "../../redux/api/ProductApiSlice.js";
+import { useFetchCategoriesQuery } from "../../redux/api/CategorySlice.js";
 import { toast } from "react-toastify";
-const Updateproduct = () => {
-  const params = useParams();
-  const { data: productData } = useGetProductByIdQuery(params._id); // not _id
+import AdminMenu from "./AdminMenu.jsx";
+import Loader from "../../components/Loader.jsx";
+
+const UpdateProduct = () => {
+  const { _id } = useParams();
+  const navigate = useNavigate();
+  const { data: productData, isLoading: productLoading } = useGetProductByIdQuery(_id);
+  const { data: categories } = useFetchCategoriesQuery();
+
+  const [uploadProductImage, { isLoading: imageLoader }] = useUploadProductImageMutation();
+  const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
+  const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
 
   const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [brand, setBrand] = useState("");
-  const [stock, setStock] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [brand, setBrand] = useState("");
+  const [stock, setStock] = useState(0);
+  const [serialNumbers, setSerialNumbers] = useState([""]);
 
-  const navigate = useNavigate();
-  const { data: categories = [] } = useFetchCategoriesQuery();
-
-  const [uploadProductImage] = useUploadProductImageMutation();
-  const [updateProduct] = useUpdateProductMutation();
-  const [deleteProduct] = useDeleteProductMutation();
-
+  const selectedCategoryObj = categories?.find((c) => c._id === category);
+  const showSerialSection = selectedCategoryObj?.isSerialTracked || false;
+  // ✅ Pre-fill data
   useEffect(() => {
-    if (productData && productData._id) {
-      setName(productData.name);
-      setDescription(productData.description);
-      setCategory(productData.category);
-      setBrand(productData.brand);
-      setQuantity(productData.quantity);
-      setPrice(productData.price);
-      setImage(productData.image);
-      setStock(productData.countInStock);
+    if (productData) {
+      setName(productData.name || "");
+      setDescription(productData.description || "");
+      setPrice(productData.price || "");
+      setCategory(productData.category || "");
+      setBrand(productData.brand || "");
+      setQuantity(productData.quantity || "");
+      setStock(productData.countInStock || 0);
+      setImage(productData.image || "");
+      setImageUrl(productData.image || "");
+      setSerialNumbers(productData.serialNumbers || [""]);
     }
   }, [productData]);
 
+  // ✅ Handle serial inputs
+  const handleSerialChange = (index, value) => {
+    const updated = [...serialNumbers];
+    updated[index] = value;
+    setSerialNumbers(updated);
+  };
+
+  const addSerialInput = () => setSerialNumbers([...serialNumbers, ""]);
+  const removeSerialInput = (index) =>
+    setSerialNumbers(serialNumbers.filter((_, i) => i !== index));
+
+  // ✅ Image upload
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.imageUrl);
+      setImageUrl(res.imageUrl);
+    } catch (error) {
+      toast.error(error?.data?.message || "Image upload failed");
+    }
+  };
+
+  const getSerialNumbersArray = () => {
+    if (!showSerialSection) return [];
+    return serialNumbers
+      .flatMap((sn) => sn.split(","))
+      .map((sn) => sn.trim())
+      .filter((sn) => sn !== "");
+  };
+
+  // ✅ Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const formData = new FormData();
       formData.append("image", image);
@@ -55,43 +96,34 @@ const Updateproduct = () => {
       formData.append("quantity", quantity);
       formData.append("brand", brand);
       formData.append("countInStock", stock);
-      const { data } = await updateProduct({
-        productId: params._id,
-        formData: formData,
-      });
-      if (data.error) {
-        toast.error("Product update failed. Try again.");
-      } else {
-        toast.success(`${data.name} is updated.`);
-        navigate("/");
+
+      if (showSerialSection) {
+        const serialArray = getSerialNumbersArray();
+        if (serialArray.length !== Number(quantity)) {
+          return toast.error(`Please provide exactly ${quantity} serial numbers.`);
+        }
+        formData.append("serialNumbers", serialArray.join(","));
+      }
+
+      const { data } = await updateProduct({ productId: _id, formData });
+      console.log(data)
+      if (data?.error) toast.error(data.error || "Product update failed.");
+      else {
+        toast.success(`${data.product.name} updated successfully`);
+        navigate("/admin/allproduct");
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Product update failed. Try again.");
+      console.log(error);
+      toast.error("Update failed.");
     }
   };
 
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
-    }
-  };
-
+  // ✅ Delete product
   const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      const confirm = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
-      if (!confirm) return;
-
-      const { data } = await deleteProduct(params._id);
-      toast.success(`${data.name} is deleted.`);
+      const { data } = await deleteProduct(_id);
+      toast.success(`${data.name} deleted successfully`);
       navigate("/admin/allproduct");
     } catch (error) {
       console.log(error);
@@ -99,97 +131,70 @@ const Updateproduct = () => {
     }
   };
 
+  if (productLoading) return <Loader />;
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-[#1a1a1a] rounded-xl shadow-lg text-white mt-10">
-      <h2 className="text-2xl font-bold mb-6 text-center">Update Product</h2>
+    <div className="max-w-4xl mx-auto p-4 md:p-6 bg-[#0B0C10] rounded-xl shadow-lg border border-gray-800 text-white mt-6">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-400">
+        🛠️ Update Product
+      </h2>
+
       <AdminMenu />
 
-      {image && (
+      {imageUrl && (
         <div className="flex justify-center mb-4">
           <img
-            src={image}
+            src={imageUrl}
             alt="product"
-            className="h-48 object-contain rounded-lg"
+            className="h-36 object-contain rounded-lg border border-yellow-400/40 shadow-md shadow-yellow-600/30 p-2 bg-[#101113]"
           />
         </div>
       )}
 
-      <label className="block w-full cursor-pointer mb-6 text-center border-2 border-dashed py-8 rounded-lg hover:bg-[#2c2c2c] transition">
-        <span className="font-semibold text-gray-300">
-          {image ? image.name || "Image uploaded" : "Click to upload image"}
-        </span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={uploadFileHandler}
-          className="hidden"
-        />
-      </label>
+      {imageLoader ? (
+        <Loader />
+      ) : (
+        <label className="block w-full cursor-pointer mb-4 text-center border border-dashed border-yellow-500/40 py-4 rounded-xl hover:border-yellow-400 transition-all duration-300">
+          <span className="text-gray-300 text-sm">
+            {image ? "Image uploaded" : " Click to Upload Product Image"}
+          </span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={uploadFileHandler}
+            className="hidden"
+          />
+        </label>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block mb-1">Name</label>
-            <input
-              type="text"
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Price</label>
-            <input
-              type="number"
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Quantity</label>
-            <input
-              type="number"
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { label: "Product Name", value: name, setValue: setName },
+            { label: "Price (PKR)", value: price, setValue: setPrice, type: "number" },
+            { label: "Quantity", value: quantity, setValue: setQuantity, type: "number" },
+            { label: "Brand", value: brand, setValue: setBrand },
+            { label: "Stock Count", value: stock, setValue: setStock, type: "number" },
+          ].map((field) => (
+            <div key={field.label}>
+              <label className="block mb-1 text-xs text-gray-400">{field.label}</label>
+              <input
+                type={field.type || "text"}
+                value={field.value}
+                onChange={(e) => field.setValue(e.target.value)}
+                required
+                className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
+              />
+            </div>
+          ))}
 
           <div>
-            <label className="block mb-1">Brand</label>
-            <input
-              type="text"
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Count In Stock</label>
-            <input
-              type="number"
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Category</label>
+            <label className="block mb-1 text-xs text-gray-400">Category</label>
             <select
-              className="w-full p-3 rounded bg-[#101011] border border-gray-600"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
+              className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
             >
               <option value="">Choose Category</option>
               {categories?.map((c) => (
@@ -201,29 +206,84 @@ const Updateproduct = () => {
           </div>
         </div>
 
-        <div className="mt-6">
-          <label className="block mb-1">Description</label>
+        <div>
+          <label className="block mb-1 text-xs text-gray-400">Description</label>
           <textarea
-            className="w-full p-3 rounded bg-[#101011] border border-gray-600 h-32 resize-none"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            className="w-full p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition outline-none h-28 resize-none text-sm"
           ></textarea>
         </div>
 
-        <div className="flex justify-between mt-8">
-          <button
-            className="bg-green-600 hover:bg-green-700 transition text-white py-3 px-6 rounded-lg font-semibold text-lg"
-            type="submit"
-          >
-            Update
-          </button>
+        {showSerialSection && (
+          <div className="bg-gray-800 p-4 rounded-lg mb-4">
+            <label className="block mb-2 text-xs text-gray-400 font-semibold">
+              Serial Numbers (for {selectedCategoryObj?.name})
+            </label>
+
+            {/* Textarea for bulk input */}
+            <textarea
+              placeholder="Paste comma-separated serial numbers here (e.g. SN001, SN002, SN003)"
+              onChange={(e) => {
+                const values = e.target.value
+                  .split(",")
+                  .map((sn) => sn.trim())
+                  .filter((sn) => sn);
+                setSerialNumbers(values);
+              }}
+              className="w-full p-2.5 mb-3 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
+            ></textarea>
+
+            {/* Individual inputs */}
+            {serialNumbers.map((sn, index) => (
+              <div key={index} className="flex items-center mb-2 gap-2">
+                <input
+                  type="text"
+                  placeholder={`Serial Number ${index + 1}`}
+                  value={sn}
+                  onChange={(e) => handleSerialChange(index, e.target.value)}
+                  className="flex-1 p-2.5 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSerialInput(index)}
+                  className="px-3 py-1 bg-red-500 rounded-lg text-white hover:bg-red-600 text-sm"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addSerialInput}
+              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm"
+            >
+              + Add Serial Number
+            </button>
+            <p className="text-gray-400 text-xs mt-1">
+              You can either add serial numbers manually or paste them all at once (comma-separated).
+            </p>
+          </div>
+        )}
+
+        <div className="flex justify-between pt-4">
           <button
             type="button"
             onClick={handleDelete}
-            className="bg-red-600 hover:bg-red-700 transition text-white py-3 px-6 rounded-lg font-semibold text-lg"
+            disabled={deleting}
+            className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md text-sm"
           >
-            Delete
+            {deleting ? "Deleting..." : "Delete Product"}
+          </button>
+
+          <button
+            type="submit"
+            disabled={updating}
+            className="px-6 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold rounded-lg shadow-md hover:shadow-yellow-500/40 transition-all duration-300 text-sm"
+          >
+            {updating ? "Updating..." : "Update Product"}
           </button>
         </div>
       </form>
@@ -231,4 +291,4 @@ const Updateproduct = () => {
   );
 };
 
-export default Updateproduct;
+export default UpdateProduct;

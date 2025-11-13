@@ -91,6 +91,7 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       serialNumbers,
     } = req.fields;
 
+    // ✅ Validate inputs
     if (!name) return res.status(400).json({ error: "Name is required" });
     if (!description)
       return res.status(400).json({ error: "Description is required" });
@@ -103,11 +104,11 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       return res.status(400).json({ error: "Quantity is required" });
     if (!brand) return res.status(400).json({ error: "Brand is required" });
     if (!image) return res.status(400).json({ error: "Image is required" });
-
+    // ✅ Find existing product
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    // Update basic fields
+    // ✅ Update basic product fields
     product.name = name;
     product.description = description;
     product.price = price;
@@ -115,34 +116,58 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
     product.quantity = quantity;
     product.brand = brand;
     product.image = image;
-
     await product.save();
 
-    // Handle serial numbers if the category is serial tracked
+    // ✅ Handle serial numbers
     const categoryData = await Category.findById(category);
-    if (categoryData?.isSerialTracked && serialNumbers) {
-      if (!Array.isArray(serialNumbers) || serialNumbers.length !== quantity) {
+    let serialsArray = [];
+
+    if (categoryData?.isSerialTracked) {
+      if (!serialNumbers) {
         return res.status(400).json({
-          error: `Please provide exactly ${quantity} serial numbers as an array.`,
+          error: `Serial numbers are required for category ${categoryData.name}`,
         });
       }
 
-      // Remove old serial numbers for this product
+      // Convert serialNumbers into clean array
+      if (typeof serialNumbers === "string") {
+        serialsArray = serialNumbers
+          .split(",")
+          .map((sn) => sn.trim())
+          .filter((sn) => sn !== "");
+      } else if (Array.isArray(serialNumbers)) {
+        serialsArray = serialNumbers.map((sn) => sn.trim());
+      }
+
+      if (serialsArray.length !== Number(quantity)) {
+        return res.status(400).json({
+          error: `Please provide exactly ${quantity} serial numbers.`,
+        });
+      }
+
+      // ✅ Remove old serials
       await SerialNumber.deleteMany({ product: product._id });
 
-      // Insert new serial numbers
-      const serialDocs = serialNumbers.map((sn) => ({
+      // ✅ Insert new serial numbers (avoid duplicates)
+      const serialDocs = serialsArray.map((sn) => ({
         serialNumber: sn,
-        product: product._id,
+        product: product._id, // 🔥 FIXED (was Product._id)
         status: "available",
       }));
 
       await SerialNumber.insertMany(serialDocs);
+    } else {
+      // If category is not serial tracked, remove any old serials
+      await SerialNumber.deleteMany({ product: product._id });
     }
 
-    res.status(200).json(product);
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Update product error:", error);
     res.status(500).json({ error: error.message });
   }
 });

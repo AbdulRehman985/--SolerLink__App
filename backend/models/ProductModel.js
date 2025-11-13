@@ -23,6 +23,7 @@ const ProductSchema = mongoose.Schema(
     quantity: { type: Number, required: true },
     category: { type: Types.ObjectId, ref: "Category", required: true },
     description: { type: String, required: true },
+    slug: { type: String, required: true, unique: true }, // new field
     reviews: [reviewSchema],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },

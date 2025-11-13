@@ -12,6 +12,8 @@ import UploadRouter from "./routes/FileUploadRouter.js";
 import { OrderRouter } from "./routes/OrderRouter.js";
 import Order from "./models/OrderModel.js";
 import { User } from "./models/userModel.js";
+import { Product } from "./models/ProductModel.js";
+import slugify from "slugify";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -26,6 +28,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 connectDB();
+async function updateSlugs() {
+  try {
+    const products = await Product.find();
+
+    for (const product of products) {
+      // Skip if slug already exists
+      if (product.slug) continue;
+
+      // Create slug from product name
+      const slug = slugify(product.name, { lower: true, strict: true });
+      product.slug = slug;
+
+      await product.save();
+      console.log(`Updated slug for: ${product.name} → ${slug}`);
+    }
+
+    console.log("All products updated with slugs!");
+    mongoose.disconnect();
+  } catch (error) {
+    console.error("Error updating slugs:", error);
+    mongoose.disconnect();
+  }
+}
+
+// updateSlugs();
 app.use("/api/user", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/product", productRouter);

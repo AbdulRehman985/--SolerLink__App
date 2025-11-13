@@ -182,6 +182,21 @@ const ProductList = () => {
             <label className="block mb-2 text-xs text-gray-400 font-semibold">
               Serial Numbers (for {selectedCategoryObj?.name})
             </label>
+
+            {/* Textarea for bulk input */}
+            <textarea
+              placeholder="Paste comma-separated serial numbers here (e.g. SN001, SN002, SN003)"
+              onChange={(e) => {
+                const values = e.target.value
+                  .split(",")
+                  .map((sn) => sn.trim())
+                  .filter((sn) => sn);
+                setSerialNumbers(values);
+              }}
+              className="w-full p-2.5 mb-3 bg-[#101113] border border-gray-700 rounded-lg text-gray-200 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-sm"
+            ></textarea>
+
+            {/* Individual inputs */}
             {serialNumbers.map((sn, index) => (
               <div key={index} className="flex items-center mb-2 gap-2">
                 <input
@@ -200,6 +215,7 @@ const ProductList = () => {
                 </button>
               </div>
             ))}
+
             <button
               type="button"
               onClick={addSerialInput}
@@ -208,7 +224,7 @@ const ProductList = () => {
               + Add Serial Number
             </button>
             <p className="text-gray-400 text-xs mt-1">
-              Add multiple serial numbers manually or paste comma-separated values.
+              You can either add serial numbers manually or paste them all at once (comma-separated).
             </p>
           </div>
         )}
