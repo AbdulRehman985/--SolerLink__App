@@ -6,6 +6,7 @@ import {
   FaTimes,
   FaUserShield,
   FaStore,
+  FaUser,
 } from "react-icons/fa";
 import {
   useDeleteUserMutation,
@@ -22,18 +23,15 @@ import { setCredentials } from "../../redux/features/auth/authSlice";
 const AdminUserList = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-
-
   const [page, setPage] = useState(1);
   const [pageSize] = useState(8);
   const [sort] = useState({});
   const [search, setSearch] = useState("");
 
-
   const [editMode, setEditMode] = useState(null);
   const [editableUserName, setEditableUserName] = useState("");
   const [editableUserEmail, setEditableUserEmail] = useState("");
-
+  const [editableUserRole, setEditableUserRole] = useState("");
 
   const { data, isLoading, error, refetch } = useGetUsersQuery({
     page,
@@ -57,11 +55,11 @@ const AdminUserList = () => {
     }
   };
 
-
   const toggleEdit = (user) => {
     setEditMode(user._id);
     setEditableUserName(user.username);
     setEditableUserEmail(user.email);
+    setEditableUserRole(user.role);
   };
 
   const updateHandler = async (id) => {
@@ -70,8 +68,10 @@ const AdminUserList = () => {
         userId: id,
         username: editableUserName,
         email: editableUserEmail,
+        role: editableUserRole,
       }).unwrap();
 
+      // Update credentials if current user updated themselves
       if (userInfo._id === updatedUser._id) {
         dispatch(setCredentials(updatedUser));
       }
@@ -82,6 +82,42 @@ const AdminUserList = () => {
     } catch (err) {
       toast.error(err?.data?.message || "Update failed");
     }
+  };
+
+  const cancelEdit = () => {
+    setEditMode(null);
+    setEditableUserName("");
+    setEditableUserEmail("");
+    setEditableUserRole("");
+  };
+
+  const getRoleBadge = (role) => {
+    const roleConfig = {
+      admin: {
+        bgColor: "bg-green-600",
+        icon: FaUserShield,
+        text: "Admin"
+      },
+      shopkeeper: {
+        bgColor: "bg-yellow-500",
+        icon: FaStore,
+        text: "Shopkeeper"
+      },
+      user: {
+        bgColor: "bg-blue-600",
+        icon: FaUser,
+        text: "User"
+      }
+    };
+
+    const config = roleConfig[role] || roleConfig.user;
+    const IconComponent = config.icon;
+
+    return (
+      <span className={`${config.bgColor} text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit`}>
+        <IconComponent className="inline" /> {config.text}
+      </span>
+    );
   };
 
   if (isLoading) return <Loader />;
@@ -103,7 +139,6 @@ const AdminUserList = () => {
         <h2 className="text-3xl font-semibold text-center sm:text-left">
           Manage Users
         </h2>
-
 
         <div className="relative w-full sm:w-72">
           <input
@@ -158,26 +193,26 @@ const AdminUserList = () => {
                   key={user._id}
                   className="border-b border-gray-700 hover:bg-gray-800 transition duration-200"
                 >
-
+                  {/* Username */}
                   <td className="py-3 px-4">
                     {editMode === user._id ? (
                       <input
                         type="text"
-                        className="bg-gray-700 p-1 rounded w-full"
+                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
                         value={editableUserName}
                         onChange={(e) => setEditableUserName(e.target.value)}
                       />
                     ) : (
-                      user.username
+                      <span className="font-medium">{user.username}</span>
                     )}
                   </td>
 
-
+                  {/* Email */}
                   <td className="py-3 px-4">
                     {editMode === user._id ? (
                       <input
                         type="email"
-                        className="bg-gray-700 p-1 rounded w-full"
+                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
                         value={editableUserEmail}
                         onChange={(e) => setEditableUserEmail(e.target.value)}
                       />
@@ -185,51 +220,68 @@ const AdminUserList = () => {
                       user.email
                     )}
                   </td>
+
+                  {/* Role */}
                   <td className="py-3 px-4">
-                    {user.role === "admin" ? (
-                      <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
-                        <FaUserShield className="inline" /> Admin
-                      </span>
-                    ) : user.role === "shopkeeper" ? (
-                      <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
-                        <FaStore className="inline" /> Shopkeeper
-                      </span>
+                    {editMode === user._id ? (
+                      <select
+                        value={editableUserRole}
+                        onChange={(e) => setEditableUserRole(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      >
+                        <option value="user">User</option>
+                        <option value="shopkeeper">Shopkeeper</option>
+                        <option value="admin">Admin</option>
+                      </select>
                     ) : (
-                      <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit">
-                        User
-                      </span>
+                      getRoleBadge(user.role)
                     )}
                   </td>
 
+                  {/* Actions */}
                   <td className="py-3 px-4 text-center">
                     {editMode === user._id ? (
                       <div className="flex justify-center gap-3">
                         <button
                           onClick={() => updateHandler(user._id)}
-                          className="text-green-400 hover:text-green-300"
+                          className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors duration-200"
+                          title="Save changes"
                         >
-                          <FaCheck />
+                          <FaCheck className="text-white" />
                         </button>
                         <button
-                          onClick={() => setEditMode(null)}
-                          className="text-red-400 hover:text-red-300"
+                          onClick={cancelEdit}
+                          className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200"
+                          title="Cancel editing"
                         >
-                          <FaTimes />
+                          <FaTimes className="text-white" />
                         </button>
                       </div>
                     ) : (
                       <div className="flex justify-center gap-3">
                         <button
                           onClick={() => toggleEdit(user)}
-                          className="text-yellow-400 hover:text-yellow-300"
+                          className="p-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors duration-200"
+                          title="Edit user"
                         >
-                          <FaEdit />
+                          <FaEdit className="text-white" />
                         </button>
                         <button
                           onClick={() => deleteHandler(user._id)}
-                          className="text-red-400 hover:text-red-300"
+                          disabled={user.role === "admin" || user._id === userInfo._id}
+                          className={`p-2 rounded-lg transition-colors duration-200 ${user.role === "admin" || user._id === userInfo._id
+                            ? "bg-gray-600 cursor-not-allowed opacity-50"
+                            : "bg-red-600 hover:bg-red-700"
+                            }`}
+                          title={
+                            user.role === "admin"
+                              ? "Cannot delete admin users"
+                              : user._id === userInfo._id
+                                ? "Cannot delete your own account"
+                                : "Delete user"
+                          }
                         >
-                          <FaTrash />
+                          <FaTrash className="text-white" />
                         </button>
                       </div>
                     )}
@@ -241,12 +293,12 @@ const AdminUserList = () => {
         </table>
       </div>
 
-
+      {/* Pagination */}
       <div className="flex justify-center items-center gap-4 mt-6">
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50"
+          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50 transition-colors duration-200"
         >
           Previous
         </button>
@@ -256,7 +308,7 @@ const AdminUserList = () => {
         <button
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
-          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50"
+          className="px-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 text-sm font-medium disabled:opacity-50 transition-colors duration-200"
         >
           Next
         </button>

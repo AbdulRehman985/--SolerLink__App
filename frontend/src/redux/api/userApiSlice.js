@@ -69,11 +69,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     updateUser: builder.mutation({
-      query: ({ userId, username, email }) => ({
+      query: ({ userId, username, email, role }) => ({
         url: `${USERS_URL}/${userId}`,
         method: "PUT",
         credentials: "include", // ⬅️ Optional but recommended if using cookies
-        body: { username, email }, // Only send what's needed
+        body: { username, email, role }, // Only send what's needed
       }),
       invalidatesTags: ["User"],
     }),

@@ -2,7 +2,7 @@ import { User } from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
-
+import mongoose from "mongoose";
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -159,7 +159,6 @@ export const updateCurrentUser = asyncHandler(async (req, res) => {
 
   user.username = username || user.username;
   user.email = email || user.email;
-
   if (password) {
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
@@ -171,7 +170,7 @@ export const updateCurrentUser = asyncHandler(async (req, res) => {
     _id: updatedUser._id,
     username: updatedUser.username,
     email: updatedUser.email,
-    isAdmin: updatedUser.isAdmin,
+    role: updatedUser.role,
   });
 });
 
@@ -179,7 +178,7 @@ export const destroyUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    if (user.isAdmin) {
+    if (user.role === "admin") {
       res.status(403);
       throw new Error("Cannot delete admin user");
     }
@@ -213,13 +212,13 @@ export const getUserById = asyncHandler(async (req, res) => {
     _id: user._id,
     username: user.username,
     email: user.email,
-    isAdmin: user.isAdmin,
+    role: user.role,
   });
 });
 
 export const updateById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { username, email, isAdmin } = req.body;
+  const { username, email, role } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(400);
@@ -232,20 +231,37 @@ export const updateById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+  if (email && !/\S+@\S+\.\S+/.test(email)) {
+    res.status(400);
+    throw new Error("Invalid email format");
+  }
+
+  if (username && username.length < 3) {
+    res.status(400);
+    throw new Error("Username must be at least 3 characters");
+  }
+  if (email && email !== user.email) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      res.status(400);
+      throw new Error("Email already registered");
+    }
+  }
+
+  if (role && !["user", "admin", "shopkeeper"].includes(role)) {
+    res.status(400);
+    throw new Error("Invalid role");
+  }
 
   user.username = username ?? user.username;
   user.email = email ?? user.email;
-
-  if (typeof isAdmin === "boolean") {
-    user.isAdmin = isAdmin;
-  }
-
+  user.role = role ?? user.role;
   const updatedUser = await user.save();
 
   res.status(200).json({
     _id: updatedUser._id,
     username: updatedUser.username,
     email: updatedUser.email,
-    isAdmin: updatedUser.isAdmin,
+    role: updatedUser.role,
   });
 });
