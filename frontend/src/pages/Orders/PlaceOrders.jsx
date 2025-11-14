@@ -14,15 +14,15 @@ const PlaceOrders = () => {
   const dispatch = useDispatch();
   const [createOrder, { error, isLoading }] = useCreateOrderMutation();
 
-  console.log({
-    orderItems: cart.cartItem,
-    shippingAddress: cart.shippingAddress,
-    paymentMethod: cart.paymentMethod,
-    itemsPrice: cart.itemsPrice,
-    shippingPrice: cart.shippingPrice,
-    taxPrice: cart.taxPrice,
-    totalPrice: cart.totalPrice,
-  });
+  // console.log({
+  //   orderItems: cart.cartItem,
+  //   shippingAddress: cart.shippingAddress,
+  //   paymentMethod: cart.paymentMethod,
+  //   itemsPrice: cart.itemsPrice,
+  //   shippingPrice: cart.shippingPrice,
+  //   taxPrice: cart.taxPrice,
+  //   totalPrice: cart.totalPrice,
+  // });
   const placeOrdersHandler = async () => {
     try {
       const res = await createOrder({
@@ -35,7 +35,9 @@ const PlaceOrders = () => {
         totalPrice: cart.totalPrice,
       }).unwrap();
       dispatch(clearCartItems());
-      navigate(`/order/${res._id}`);
+      console.log(res)
+      console.log(res._id)
+      navigate(`/order/${res?.order._id}`);
     } catch (error) {
       toast.error(error);
     }

@@ -31,6 +31,7 @@ const UpdateProduct = () => {
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
   const [stock, setStock] = useState(0);
+  console.log("🚀 ~ UpdateProduct ~ stock:", stock)
   const [serialNumbers, setSerialNumbers] = useState([""]);
 
   const selectedCategoryObj = categories?.find((c) => c._id === category);
