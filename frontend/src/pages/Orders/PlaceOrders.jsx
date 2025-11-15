@@ -14,15 +14,6 @@ const PlaceOrders = () => {
   const dispatch = useDispatch();
   const [createOrder, { error, isLoading }] = useCreateOrderMutation();
 
-  // console.log({
-  //   orderItems: cart.cartItem,
-  //   shippingAddress: cart.shippingAddress,
-  //   paymentMethod: cart.paymentMethod,
-  //   itemsPrice: cart.itemsPrice,
-  //   shippingPrice: cart.shippingPrice,
-  //   taxPrice: cart.taxPrice,
-  //   totalPrice: cart.totalPrice,
-  // });
   const placeOrdersHandler = async () => {
     try {
       const res = await createOrder({

@@ -63,3 +63,44 @@ app.use("/api/orders", OrderRouter);
 app.listen(port, () => {
   console.log(`server is running on port:${port}`);
 });
+// Use this function to generate guaranteed unique serials
+function generateUniqueSerialNumbers(count, productName = "LONGI") {
+  const prefix = "SOL-PV";
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const timestamp = Date.now().toString().slice(-6);
+
+  const serials = [];
+  const usedSerials = new Set();
+
+  for (let i = 1; i <= count; i++) {
+    let serial;
+    let attempts = 0;
+
+    // Generate until we get a unique one
+    do {
+      const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+      serial = `${prefix}-${date}-${productName.slice(
+        0,
+        3
+      )}${timestamp}${random}${i.toString().padStart(4, "0")}`;
+      attempts++;
+
+      if (attempts > 100) {
+        // Fallback if we can't generate unique (very unlikely)
+        serial = `${prefix}-${date}-${productName.slice(
+          0,
+          3
+        )}${timestamp}${i}${Math.random().toString(36).substring(2, 8)}`;
+      }
+    } while (usedSerials.has(serial));
+
+    usedSerials.add(serial);
+    serials.push(serial);
+  }
+
+  return serials;
+}
+
+// Generate 100 guaranteed unique serials
+const uniqueSerials = generateUniqueSerialNumbers(100, "NGI");
+console.log(uniqueSerials.join(","));

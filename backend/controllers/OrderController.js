@@ -4,72 +4,6 @@ import Order from "../models/OrderModel.js";
 import { User } from "../models/userModel.js";
 import mongoose from "mongoose";
 import { SerialNumber } from "../models/SerialNumberModel.js";
-// function calcPrice(orderItems) {
-//   const itemsPrice = orderItems.reduce(
-//     (acc, item) => acc + item.price * item.qty,
-//     0
-//   );
-
-//   const shippingPrice = itemsPrice > 100 ? 0 : 10;
-//   const taxRate = 0.15;
-//   const taxPrice = Number((itemsPrice * taxRate).toFixed(2));
-//   const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
-
-//   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
-// }
-
-// export const createOrder = expressAsyncHandler(async (req, res) => {
-//   try {
-//     const { orderItems, shippingAddress, paymentMethod } = req.body;
-
-//     if (!orderItems || orderItems.length === 0) {
-//       res.status(400);
-//       throw new Error("No order found");
-//     }
-
-//     const itemsFromDb = await Product.find({
-//       _id: { $in: orderItems.map((x) => x._id) },
-//     });
-
-//     const dbOrderItems = orderItems.map((itemFromClient) => {
-//       const matchingItemFromDb = itemsFromDb.find(
-//         (itemFromDb) => itemFromDb._id.toString() === itemFromClient._id
-//       );
-
-//       if (!matchingItemFromDb) {
-//         res.status(404);
-//         throw new Error(`Product Not Found ${itemFromClient._id}`);
-//       }
-
-//       return {
-//         ...itemFromClient,
-//         product: itemFromClient._id,
-//         price: matchingItemFromDb.price,
-//         _id: undefined,
-//       };
-//     });
-
-//     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
-//       calcPrice(dbOrderItems);
-
-//     const order = new Order({
-//       orderItems: dbOrderItems,
-//       user: req.user._id,
-//       shippingAddress,
-//       paymentMethod,
-//       itemsPrice,
-//       taxPrice,
-//       shippingPrice,
-//       totalPrice,
-//     });
-
-//     const createdOrder = await order.save();
-//     res.status(201).json(createdOrder);
-//   } catch (error) {
-//     res.status(500).json({ error: error?.message });
-//     console.error(error);
-//   }
-// });
 
 function calcPrice(orderItems) {
   const itemsPrice = orderItems.reduce(
@@ -228,7 +162,7 @@ export const createOrder = expressAsyncHandler(async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
-    // Populate order for response
+    //  Populate order for response
     const populatedOrder = await Order.findById(createdOrder._id)
       .populate("user", "username email")
       .populate("orderItems.product", "name image category");
